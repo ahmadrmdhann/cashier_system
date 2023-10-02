@@ -11,7 +11,7 @@ public class Main {
         int jumlahNasiGoreng, jumlahMieGoreng, jumlahSate, jumlahAyamGoreng, jumlahAyamGeprek; 
         double totalHarga, uangPembeli, uangKembalian;
         boolean meja01 = true, meja02 = true, meja03 = true;
-        boolean mejaStatusTrue = true;
+        boolean mejaStatusTrue = true; //Persiapan meja kembali tersedia
         boolean mejaStatusFalse = false;
         String mejaMana;
         int jumlahOrang;

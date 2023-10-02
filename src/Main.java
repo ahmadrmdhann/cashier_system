@@ -4,10 +4,30 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        String username, password;
+        String usernameOwner = "Owner";
+        String passwordOwner = "owner123";
         String namaPembeli;
         int jumlahNasiGoreng, jumlahMieGoreng, jumlahSate, jumlahAyamGoreng, jumlahAyamGeprek; 
         double totalHarga, uangPembeli, uangKembalian;
-        System.out.print("Silahkan masukkan nama pembeli : ");
+
+        //Sistem registrasi
+
+        System.out.print("Masukkan username anda: ");
+        username = sc.nextLine();
+        System.out.print("Masukkan password anda: ");
+        password = sc.nextLine();
+
+        if (username.equalsIgnoreCase(usernameOwner) && password.equals(passwordOwner)) {
+            System.out.println("Telah berhasil login sebagai Owner!");
+        } else {
+            System.out.println("User dan Passowrd salah!");
+            System.exit(0);
+        }
+
+        // fitur order menu dan cetak struk
+        System.out.println("\nSelamat datang di restoran kami!");
+        System.out.print("Silahkan masukkan nama anda untuk memulai memesan : ");
         namaPembeli = sc.nextLine();
         System.out.print("Berapa banyak anda ingin memesan Nasi Goreng (Rp. 10.000/pcs) : ");
         jumlahNasiGoreng = sc.nextInt();

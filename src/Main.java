@@ -18,17 +18,17 @@ public class Main {
 
         // Sistem registrasi
 
-        System.out.print("Masukkan username anda: ");
+        System.out.print("Masukkan username anda : ");
         username = sc.nextLine();
-        System.out.print("Masukkan password anda: ");
-        password = sc.nextLine();
-
-        if (username.equalsIgnoreCase(usernameOwner) && password.equals(passwordOwner)) {
-            System.out.println("Telah berhasil login sebagai Owner!");
-        } else {
-            System.out.println("User dan Passowrd salah!");
-            System.exit(0);
-        }
+        if (username.equals(usernameOwner)){
+            System.out.print("Masukkan password anda : ");
+            password = sc.nextLine();
+          if (password.equals(passwordOwner)){
+          System.out.print("Anda berhasil login");
+           } else 
+          System.out.print("Password anda salah ");
+        } else
+        System.out.print("Username tidak ditemukan");
 
         // Fitur order menu dan cetak struk
 
@@ -76,8 +76,8 @@ public class Main {
         if (meja03 == true) {
             System.out.println("Meja 3 tersedia!");
         }
-        System.out.println("Pilihlah meja mana yang ingin anda tempati (1/2/3) ?");
-        mejaMana = sc.nextLine();
+        System.out.print("Pilihlah meja mana yang ingin anda tempati (1/2/3) : ");
+        mejaMana = sc.next();
         System.out.print("Anda ingin melakukan reservasi untuk berapa orang : ");
         jumlahOrang = sc.nextInt();
 

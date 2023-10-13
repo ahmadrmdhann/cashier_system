@@ -15,7 +15,10 @@ public class Main {
         int menuChoice;
 
         //Inisialisasi Fitur Daftar Menu
-        int jumlahMenu, banyakSate = 0, banyakSayurLodeh = 0, banyakSayurAsem = 0, banyakAyamGeprek = 0, banyakTeh = 0, banyakJeruk = 0, banyakSusuSoda = 0, totalNasgor = 0, totalSate = 0, totalSayurLodeh = 0, totalSayurAsem = 0, totalAyamGeprek = 0, totalTeh = 0, totalJeruk = 0, totalSusuSoda = 0, banyakNasgor = 0, totalHarga = 0, uangKembalian = 0;
+        int jumlahMenu, banyakSate = 0, banyakSayurLodeh = 0, banyakSayurAsem = 0, banyakAyamGeprek = 0, banyakTeh = 0;
+        int banyakJeruk = 0, banyakSusuSoda = 0, totalNasgor = 0, totalSate = 0, totalSayurLodeh = 0, totalSayurAsem = 0;
+        int totalAyamGeprek = 0, totalTeh = 0, totalJeruk = 0, totalSusuSoda = 0, banyakNasgor = 0, totalHarga = 0;
+        int uangKembalian = 0;
         int uangPembeli;
 
         //Inisialisasi Fitur Reservasi Meja

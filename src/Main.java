@@ -24,11 +24,9 @@ public class Main {
         int[] totalMenuArr = new int[8];
 
         // Inisialisasi Fitur Reservasi Meja
-        boolean meja01 = true, meja02 = true, meja03 = true;
-        boolean mejaStatusTrue = true; // Persiapan meja kembali tersedia
-        boolean mejaStatusFalse = false;
-        String mejaMana;
-        int jumlahOrang;
+        boolean[] statusMeja = { true, true, true, false, true };
+        int jmlOrangMeja;
+        int scMeja;
 
         // Sistem registrasi
 
@@ -166,40 +164,42 @@ public class Main {
 
             case 5:
                 // Fitur Reservasi Meja
-                if (meja01 == true) {
-                    System.out.println("\nMeja 1 tersedia!");
+                // Mengecek ketersediaan meja
+                for (int k = 1; k <= statusMeja.length; k++) {
+                    if (statusMeja[k - 1] == true) {
+                        System.out.printf("Meja %d tersedia!\n", k);
+                    }
                 }
-                if (meja02 == true) {
-                    System.out.println("Meja 2 tersedia!");
-                }
-                if (meja03 == true) {
-                    System.out.println("Meja 3 tersedia!");
-                }
-                System.out.print("Pilihlah meja mana yang ingin anda tempati (1/2/3) : ");
-                mejaMana = sc.next();
-                System.out.print("Anda ingin melakukan reservasi untuk berapa orang : ");
-                jumlahOrang = sc.nextInt();
 
-                switch (mejaMana) {
-                    case "1":
-                        System.out
-                                .println("Anda telah melakukan reservasi untuk meja 1 untuk " + jumlahOrang + " orang");
-                        meja01 = mejaStatusFalse;
-                        // System.out.println(meja01);
-                        break;
-                    case "2":
-                        System.out
-                                .println("Anda telah melakukan reservasi untuk meja 2 untuk " + jumlahOrang + " orang");
-                        meja02 = mejaStatusFalse;
-                        // System.out.println(meja02);
-                        break;
-                    case "3":
-                        System.out.println(
-                                "Anda telah melakukan reservasi untuk3 meja 3 untuk " + jumlahOrang + " orang");
-                        meja03 = mejaStatusFalse;
-                        // System.out.println(meja03);
-                        break;
+                System.out.printf("Pilihlah meja mana yang ingin anda tempati (1-%d) : ", statusMeja.length);
+                scMeja = sc.nextInt();
+
+                // Mengecek inputan scMeja
+                while (scMeja > statusMeja.length || scMeja < 1 || statusMeja[scMeja - 1] == false) {
+                    // Menangkap scMeja jika 0 atau lebih dari meja yang tersedia
+                    if (scMeja > statusMeja.length || scMeja < 1) {
+                        System.out.print("Meja tidak tersedia, silahkan pilih lagi: ");
+                        scMeja = sc.nextInt();
+                    } else { // Menangkap ketidaksediaan meja
+                        System.out.println("Maaf, meja tidak tersedia");
+                        System.out.printf("Pilihlah meja mana yang ingin anda  (1-%d) : ", statusMeja.length);
+                        scMeja = sc.nextInt();
+                    }
                 }
+
+                System.out.printf("Anda ingin reservasi meja %d untuk berapa orang? ", scMeja);
+                jmlOrangMeja = sc.nextInt();
+
+                // Mengecek input jmlOrangMeja tidak 0
+                while (jmlOrangMeja < 1) {
+                    System.out.println("\nReservasi meja tidak boleh kosong");
+                    System.out.printf("Anda ingin reservasi meja %d untuk berapa orang? ", scMeja);
+                    jmlOrangMeja = sc.nextInt();
+                }
+                statusMeja[scMeja - 1] = false;
+
+                System.out.printf("\nAnda telah melakukan reservasi meja %d untuk %d", scMeja, jmlOrangMeja);
+                break;
         }
     }
 }

@@ -27,6 +27,11 @@ public class Testing {
         int[] isBanyakMenuArr = new int[8];
         int[] totalMenuArr = new int[8];
 
+        // Inisialisasi Fitur Reservasi Meja
+        boolean[] statusMeja = { true, true, true, false, true };
+        int jmlOrangMeja;
+        int scMeja;
+
         // Sistem Login
         while (!isLoggedIn) {
             System.out.println("+-----------------------------------------+");
@@ -176,11 +181,49 @@ public class Testing {
                                 }
                                 backMenu = false; // kembali ke main menu
                             continue;
+                            case 5:
+                            // Fitur Reservasi Meja
+                            // Mengecek ketersediaan meja
+                            for (int k = 1; k <= statusMeja.length; k++) {
+                                if (statusMeja[k - 1] == true) {
+                                    System.out.printf("Meja %d tersedia!\n", k);
+                                }
+                            }
+            
+                            System.out.printf("Pilihlah meja mana yang ingin anda tempati (1-%d) : ", statusMeja.length);
+                            scMeja = sc.nextInt();
+            
+                            // Mengecek inputan scMeja
+                            while (scMeja > statusMeja.length || scMeja < 1 || statusMeja[scMeja - 1] == false) {
+                                // Menangkap scMeja jika 0 atau lebih dari meja yang tersedia
+                                if (scMeja > statusMeja.length || scMeja < 1) {
+                                    System.out.print("Meja tidak tersedia, silahkan pilih lagi: ");
+                                    scMeja = sc.nextInt();
+                                } else { // Menangkap ketidaksediaan meja
+                                    System.out.println("Maaf, meja tidak tersedia");
+                                    System.out.printf("Pilihlah meja mana yang ingin anda  (1-%d) : ", statusMeja.length);
+                                    scMeja = sc.nextInt();
+                                }
+                            }
+            
+                            System.out.printf("Anda ingin reservasi meja %d untuk berapa orang? ", scMeja);
+                            jmlOrangMeja = sc.nextInt();
+            
+                            // Mengecek input jmlOrangMeja tidak 0
+                            while (jmlOrangMeja < 1) {
+                                System.out.println("\nReservasi meja tidak boleh kosong");
+                                System.out.printf("Anda ingin reservasi meja %d untuk berapa orang? ", scMeja);
+                                jmlOrangMeja = sc.nextInt();
+                            }
+                            statusMeja[scMeja - 1] = false;
+            
+                            System.out.printf("\nAnda telah melakukan reservasi meja %d untuk %d", scMeja, jmlOrangMeja);
+                            break;
                         // menu/fitur selanjutnya bisa segera ditambahkan
                         default:
                             System.out.println("Invalid choice/Feature is Under Construction. Please try again.");
                             continue;
-            }
+                }
             }
         }
     }

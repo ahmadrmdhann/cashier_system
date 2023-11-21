@@ -74,7 +74,7 @@ public class beta {
             {0 , 0},
             {0 , 0}
         };
-        String[][] menuCode = {
+        String[][] menuCode = { // variabel untuk memepermudah mencari menu dengan di gabungkan dengan menuIndex
             {"A1", "B1"},
             {"A2", "B2"},
             {"A3", "B3"},
@@ -98,7 +98,7 @@ public class beta {
         int inputMenuSettings; // variabel untuk menerima inputan dalam menu settings
         String inputUpdateStock; // variabel untuk menerima inputan dalam menu update stock
         String inputChangePrice; // variabel untuk menerima inputan dalam menu change price
-        String inputDeleteMenu;
+        String inputDeleteMenu; // variabel untuk menerima inputan dalam menghapus menu
         String newMenu; // variabel untuk menerima input nama menu baru
         int newStock; // variabel untuk menerima input stock yang akan di tambahkan
         int newPrice; // variabel untuk menerima input harga baru
@@ -123,7 +123,7 @@ public class beta {
                     userIndex = i;
                 }
             }
-            if (userIndex >= 0) {
+            if (userIndex >= 0) { // userIndex digunakan untuk menyamakan antara index username dan index password
                 System.out.print("Password\t: ");
                 password = sc.nextLine();
                 if (password.equals(account[userIndex][1])) { // indeks kolom 1 digunakan hanya untuk mengakses password
@@ -204,7 +204,7 @@ public class beta {
                                 if (menuIndex != -1 && menuType != -1) {
                                     if (menu[menuIndex][menuType] == null) {
                                         System.out.println("Invalid menu code. Please try again.");
-                                        i--; // Repeat the order input for null data
+                                        i--; // Akan mengulang jika order yang dimasukkan berisi nilai default null
                                         continue;
                                     }
 
@@ -212,7 +212,7 @@ public class beta {
                                     menuAmount = sc.nextInt();
                                     sc.nextLine();
 
-                                    // Check if there is enough stock
+                                    // Mengecek apakah stock tersedia
                                     if (menuAmount <= priceStockFood[menuIndex][1] && menuType == 0) {
                                         priceStockFood[menuIndex][1] -= menuAmount;
                                     }
@@ -222,12 +222,12 @@ public class beta {
                                     else {
                                         if (priceStockFood[menuIndex][1] == 0 && priceStockBeverage[menuIndex][1] == 0) {
                                             System.out.println("Sorry, "+menu[menuIndex][menuType]+" is out of stock. Please try again.");
-                                            i--; // Repeat the order input for out of stock
+                                            i--; // Akan mengulang jika stock sudah habiss
                                             continue;
                                         }
                                         else {
                                             System.out.println("Insufficient stock. Please try again.");
-                                            i--; // Repeat the order input for insufficient stock
+                                            i--; // Akan mengulang jika stock yang dimasukkan tidak mencukupi
                                             continue;
                                         }
                                     }
@@ -235,7 +235,7 @@ public class beta {
                                 }
                                 else {
                                     System.out.println("Invalid menu code. Please try again.");
-                                    i--; // Repeat the order input for an invalid menu code
+                                    i--; // Akan mengulang jika code yang dimasukkan tidak valid
                                 }
                             }
                             break;

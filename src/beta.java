@@ -74,7 +74,7 @@ public class beta {
             {0 , 0},
             {0 , 0}
         };
-        String[][] menuCode = {
+        String[][] menuCode = { // variabel untuk memepermudah mencari menu dengan di gabungkan dengan menuIndex
             {"A1", "B1"},
             {"A2", "B2"},
             {"A3", "B3"},
@@ -89,7 +89,7 @@ public class beta {
         int numbersOfOrder; // variabel untuk menerima jumlah pesanan
         String selectedMenu; // variabel untuk menerima input menuCode dari pengguna
         int menuType = -1; // variabel untuk menentukan jenis menu (makanan/minuman)
-        int menuAmmount; // variabel untuk menerima banyaknya order dalam satu jenis makanan atau minuman
+        int menuAmount = 0; // variabel untuk menerima banyaknya order dalam satu jenis makanan atau minuman
 
         /*
          * Menu Settings Feature
@@ -98,7 +98,7 @@ public class beta {
         int inputMenuSettings; // variabel untuk menerima inputan dalam menu settings
         String inputUpdateStock; // variabel untuk menerima inputan dalam menu update stock
         String inputChangePrice; // variabel untuk menerima inputan dalam menu change price
-        String inputDeleteMenu;
+        String inputDeleteMenu; // variabel untuk menerima inputan dalam menghapus menu
         String newMenu; // variabel untuk menerima input nama menu baru
         int newStock; // variabel untuk menerima input stock yang akan di tambahkan
         int newPrice; // variabel untuk menerima input harga baru
@@ -128,7 +128,7 @@ public class beta {
                     userIndex = i;
                 }
             }
-            if (userIndex >= 0) {
+            if (userIndex >= 0) { // userIndex digunakan untuk menyamakan antara index username dan index password
                 System.out.print("Password\t: ");
                 password = sc.nextLine();
                 if (password.equals(account[userIndex][1])) { // indeks kolom 1 digunakan hanya untuk mengakses password
@@ -187,18 +187,60 @@ public class beta {
                             numbersOfOrder = sc.nextInt();
                             sc.nextLine();
                             for (int i = 0; i < numbersOfOrder; i++) {
-                                System.out.print("["+(i+1)+"] Select the menu do you want to order (use the code) : ");
+                                System.out.print("[" + (i + 1) + "] Select the menu you want to order (use the code) : ");
                                 selectedMenu = sc.nextLine();
-                                if (selectedMenu.equalsIgnoreCase(menuCode[i][0]) || selectedMenu.equalsIgnoreCase(menuCode[i][1])) {
-                                    menuIndex = i;
-                                    if (selectedMenu.startsWith("A") || selectedMenu.startsWith("a")) {
-                                        menuType = 0;
+
+                                menuIndex = -1;
+                                menuType = -1;
+
+                                for (int j = 0; j < menu.length; j++) {
+                                    if (selectedMenu.equalsIgnoreCase(menuCode[j][0]) || selectedMenu.equalsIgnoreCase(menuCode[j][1])) {
+                                        menuIndex = j;
+                                        if (selectedMenu.startsWith("A") || selectedMenu.startsWith("a")) {
+                                            menuType = 0;
+                                        }
+                                        if (selectedMenu.startsWith("B") || selectedMenu.startsWith("b")) {
+                                            menuType = 1;
+                                        }
+                                        break;
                                     }
-                                    if (selectedMenu.startsWith("B") || selectedMenu.startsWith("b")) {
-                                        menuType = 1;
+                                }
+
+                                if (menuIndex != -1 && menuType != -1) {
+                                    if (menu[menuIndex][menuType] == null) {
+                                        System.out.println("Invalid menu code. Please try again.");
+                                        i--; // Akan mengulang jika order yang dimasukkan berisi nilai default null
+                                        continue;
                                     }
-                                    System.out.print("Enter the quantity of "+menu[menuIndex][menuType]+" : ");
-                                    menuAmmount = sc.nextInt();
+
+                                    System.out.print("Enter the quantity of " + menu[menuIndex][menuType] + " : ");
+                                    menuAmount = sc.nextInt();
+                                    sc.nextLine();
+
+                                    // Mengecek apakah stock tersedia
+                                    if (menuAmount <= priceStockFood[menuIndex][1] && menuType == 0) {
+                                        priceStockFood[menuIndex][1] -= menuAmount;
+                                    }
+                                    else if (menuAmount <= priceStockBeverage[menuIndex][1] && menuType == 1) {
+                                        priceStockBeverage[menuIndex][1] -= menuAmount;
+                                    } 
+                                    else {
+                                        if (priceStockFood[menuIndex][1] == 0 && priceStockBeverage[menuIndex][1] == 0) {
+                                            System.out.println("Sorry, "+menu[menuIndex][menuType]+" is out of stock. Please try again.");
+                                            i--; // Akan mengulang jika stock sudah habiss
+                                            continue;
+                                        }
+                                        else {
+                                            System.out.println("Insufficient stock. Please try again.");
+                                            i--; // Akan mengulang jika stock yang dimasukkan tidak mencukupi
+                                            continue;
+                                        }
+                                    }
+                                    System.out.println("You ordered " + menuAmount + " of " + menu[menuIndex][menuType]);
+                                }
+                                else {
+                                    System.out.println("Invalid menu code. Please try again.");
+                                    i--; // Akan mengulang jika code yang dimasukkan tidak valid
                                 }
                             }
                             break;
@@ -612,7 +654,7 @@ public class beta {
                                         break;
                     
                                     case 4:
-                                        System.out.println("Terima kasih! Keluar dari reservasi meja asdgjfgs.");
+                                        System.out.println("Terima kasih! Keluar dari reservasi meja.");
                                         System.exit(0);
                     
                                     default:

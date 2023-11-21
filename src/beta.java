@@ -108,6 +108,7 @@ public class beta {
          */
         int maxMeja = 10; // Jumlah maksimum meja
         boolean[] mejaTersedia = new boolean[maxMeja];
+        boolean loopReservation = false;
 
 
         while (!isLoggedIn) {
@@ -148,6 +149,7 @@ public class beta {
                     // reset untuk setiap looping di dalam main menu
                     loopMenuSettings = false;
                     loopAccountSettings = false;
+                    loopReservation = false;
 
                     System.out.println("\nWelcome to our Restaurant!\n");
                     System.out.println("-------------------- MAIN MENU --------------------");
@@ -602,12 +604,12 @@ public class beta {
                                 mejaTersedia[i] = true; // Semua meja awalnya tersedia
                             }
                     
-                            while (true) {
+                            while (!loopReservation) {
                                 System.out.println("\n===== Reservasi Meja =====");
                                 System.out.println("1. Meja yang tersedia");
                                 System.out.println("2. Reservasi Meja");
                                 System.out.println("3. Hapus Reservasi Meja");
-                                System.out.println("4. Keluar");
+                                System.out.println("0. Keluar");
                                 System.out.print("Pilih (1-4): ");
                     
                                 int pilihan = sc.nextInt();
@@ -653,15 +655,16 @@ public class beta {
                                         }
                                         break;
                     
-                                    case 4:
-                                        System.out.println("Terima kasih! Keluar dari reservasi meja.");
-                                        System.exit(0);
+                                    case 0:
+                                        loopReservation = true;
+                                        break;
                     
                                     default:
                                         System.out.println("Pilihan tidak valid. Silakan pilih lagi.");
                                         break;
                                 }
                             }
+                            break;
                         default:
                             System.out.println("\nInvalid input.");
                             break;

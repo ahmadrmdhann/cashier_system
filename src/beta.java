@@ -103,6 +103,11 @@ public class beta {
         int newStock; // variabel untuk menerima input stock yang akan di tambahkan
         int newPrice; // variabel untuk menerima input harga baru
 
+        /*
+         * menu reservasi
+         */
+        int maxMeja = 10; // Jumlah maksimum meja
+        boolean[] mejaTersedia = new boolean[maxMeja];
 
 
         while (!isLoggedIn) {
@@ -550,6 +555,71 @@ public class beta {
                             }
                             break;
 
+                        case 4:
+                            for (int i = 0; i < maxMeja; i++) {
+                                mejaTersedia[i] = true; // Semua meja awalnya tersedia
+                            }
+                    
+                            while (true) {
+                                System.out.println("\n===== Reservasi Meja =====");
+                                System.out.println("1. Meja yang tersedia");
+                                System.out.println("2. Reservasi Meja");
+                                System.out.println("3. Hapus Reservasi Meja");
+                                System.out.println("4. Keluar");
+                                System.out.print("Pilih (1-4): ");
+                    
+                                int pilihan = sc.nextInt();
+                    
+                                switch (pilihan) {
+                                    case 1:
+                                        System.out.println("Daftar Meja:");
+                                        for (int i = 0; i < mejaTersedia.length; i++) {
+                                            String status = mejaTersedia[i] ? "Tersedia" : "Tidak Tersedia";
+                                            System.out.println("Meja " + (i + 1) + ": " + status);
+                                        }
+                                        break;
+                    
+                                    case 2:
+                                        System.out.print("Masukkan nomor meja yang ingin direservasi: ");
+                                        int nomorMejaReservasi = sc.nextInt();
+                    
+                                        if (nomorMejaReservasi >= 1 && nomorMejaReservasi <= mejaTersedia.length) {
+                                            if (mejaTersedia[nomorMejaReservasi - 1]) {
+                                                mejaTersedia[nomorMejaReservasi - 1] = false;
+                                                System.out.println("Reservasi meja " + nomorMejaReservasi + " berhasil.");
+                                            } else {
+                                                System.out.println("Meja telah terisi, silahkan memilih meja yang lain");
+                                            }
+                                        } else {
+                                            System.out.println("Nomor meja tidak valid.");
+                                        }
+                                        break;
+                    
+                                    case 3:
+                                        System.out.print("Masukkan nomor meja yang ingin di batalkan: ");
+                                        int nomorMejaHapusReservasi = sc.nextInt();
+                    
+                                        if (nomorMejaHapusReservasi >= 1 && nomorMejaHapusReservasi <= mejaTersedia.length) {
+                                            if (!mejaTersedia[nomorMejaHapusReservasi - 1]) {
+                                                mejaTersedia[nomorMejaHapusReservasi - 1] = true;
+                                                System.out.println("Reservasi meja " + nomorMejaHapusReservasi + " berhasil dihapus.");
+                                            } else {
+                                                System.out.println("Meja belum di reservasi.");
+                                            }
+                                        } else {
+                                            System.out.println("Nomor meja tidak valid.");
+                                        }
+                                        break;
+                    
+                                    case 4:
+                                        System.out.println("Terima kasih! Keluar dari reservasi meja asdgjfgs.");
+                                        System.exit(0);
+                    
+                                    default:
+                                        System.out.println("Pilihan tidak valid. Silakan pilih lagi.");
+                                        break;
+                                }
+                            }
                         default:
                             System.out.println("\nInvalid input.");
                             break;

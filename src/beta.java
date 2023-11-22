@@ -302,7 +302,7 @@ public class beta {
                                         for (int i = 0; i < menuCode.length; i++) {
                                             if (inputUpdateStock.equalsIgnoreCase(menuCode[i][0]) || inputUpdateStock.equalsIgnoreCase(menuCode[i][1])) {
                                                 menuIndex = i;
-                                                if (menu[menuIndex][0] != null && menu[menuIndex][1] != null) {
+                                                if (menu[menuIndex][0] != null || menu[menuIndex][1] != null) {
                                                     if (inputUpdateStock.equalsIgnoreCase(menuCode[i][0])) {
                                                         System.out.print("\nInsert new stock of "+menu[menuIndex][0]+" : ");
                                                         newStock = sc.nextInt();
@@ -346,7 +346,7 @@ public class beta {
                                         for (int i = 0; i < menuCode.length; i++) {
                                             if (inputChangePrice.equalsIgnoreCase(menuCode[i][0]) || inputChangePrice.equalsIgnoreCase(menuCode[i][1])) {
                                                 menuIndex = i;
-                                                if (menu[menuIndex][0] != null && menu[menuIndex][1] != null) {
+                                                if (menu[menuIndex][0] != null || menu[menuIndex][1] != null) {
                                                     if (inputChangePrice.equalsIgnoreCase(menuCode[i][0])) {
                                                         System.out.print("\nInput new price of "+menu[menuIndex][0]+" : ");
                                                         newPrice = sc.nextInt();
@@ -394,6 +394,7 @@ public class beta {
                                                     break;
                                                 }
                                             }
+                                            break;
                                         }
                                         if (menuType == 2) {
                                             System.out.print("Add new beverage name : ");
@@ -413,6 +414,7 @@ public class beta {
                                                     break;
                                                 }
                                             }
+                                            break;
                                         }
                                         else {
                                             System.out.println("Invalid input.");
@@ -439,7 +441,7 @@ public class beta {
                                         for (int i = 0; i < menuCode.length; i++) {
                                             if (inputDeleteMenu.equalsIgnoreCase(menuCode[i][0]) || inputDeleteMenu.equalsIgnoreCase(menuCode[i][1])) {
                                                 menuIndex = i;
-                                                if (menu[menuIndex][0] != null && menu[menuIndex][1] != null) {
+                                                if (menu[menuIndex][0] != null || menu[menuIndex][1] != null) {
                                                     if (inputDeleteMenu.equalsIgnoreCase(menuCode[i][0])) {
                                                         menu[menuIndex][0] = null;
                                                         priceStockFood[menuIndex][0] = 0;
@@ -452,6 +454,7 @@ public class beta {
                                                         priceStockBeverage[menuIndex][1] = 0;
                                                         System.out.println("\nMenu successfully deleted.");
                                                     }
+                                                    break;
                                                 }
                                                 else {
                                                     System.out.println("\nInvalid input.");

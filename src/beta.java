@@ -106,8 +106,9 @@ public class beta {
         /*
          * menu reservasi
          */
-        int maxMeja = 10; // Jumlah maksimum meja
-        boolean[] mejaTersedia = new boolean[maxMeja];
+        int maxTable = 10; // Jumlah maksimum meja
+        boolean[] tableAvailable = new boolean[maxTable];
+        int[] downPayment = new int[maxTable]; 
         boolean loopReservation = false;
 
 
@@ -603,68 +604,81 @@ public class beta {
                             break;
 
                         case 4:
-                            for (int i = 0; i < maxMeja; i++) {
-                                mejaTersedia[i] = true; // Semua meja awalnya tersedia
-                            }
-                    
-                            while (!loopReservation) {
-                                System.out.println("\n===== Reservasi Meja =====");
-                                System.out.println("1. Meja yang tersedia");
-                                System.out.println("2. Reservasi Meja");
-                                System.out.println("3. Hapus Reservasi Meja");
-                                System.out.println("0. Keluar");
-                                System.out.print("Pilih (1-4): ");
-                    
-                                int pilihan = sc.nextInt();
-                    
-                                switch (pilihan) {
-                                    case 1:
-                                        System.out.println("Daftar Meja:");
-                                        for (int i = 0; i < mejaTersedia.length; i++) {
-                                            String status = mejaTersedia[i] ? "Tersedia" : "Tidak Tersedia";
-                                            System.out.println("Meja " + (i + 1) + ": " + status);
-                                        }
-                                        break;
-                    
-                                    case 2:
-                                        System.out.print("Masukkan nomor meja yang ingin direservasi: ");
-                                        int nomorMejaReservasi = sc.nextInt();
-                    
-                                        if (nomorMejaReservasi >= 1 && nomorMejaReservasi <= mejaTersedia.length) {
-                                            if (mejaTersedia[nomorMejaReservasi - 1]) {
-                                                mejaTersedia[nomorMejaReservasi - 1] = false;
-                                                System.out.println("Reservasi meja " + nomorMejaReservasi + " berhasil.");
+                        for (int i = 0; i < maxTable; i++) {
+                            tableAvailable[i] = true; // Semua meja awalnya tersedia
+                            downPayment[i] = 0; 
+                        }
+                
+                        while (!loopReservation) {
+                            System.out.println("\n===== Table Reservation =====");
+                            System.out.println("[1] Table List");
+                            System.out.println("[2] Reserve Table");
+                            System.out.println("[3] Delete Table Order");
+                            System.out.println("[0] Back to main menu");
+                            System.out.print("Select menu: ");
+                
+                            int tableReservation = sc.nextInt();
+                
+                            switch (tableReservation) {
+                                case 1:
+                                    System.out.println("Table List:");
+                                    for (int i = 0; i < tableAvailable.length; i++) {
+                                        String status = tableAvailable[i] ? "Available" : "Not Available";
+                                        System.out.println("Table " + (i + 1) + " : " + status);
+                                    }
+                                    break;
+                
+                                case 2:
+                                    System.out.print("Select the table number you want to serve: ");
+                                    int reservationTableNumber = sc.nextInt();
+                
+                                    if (reservationTableNumber >= 1 && reservationTableNumber <= tableAvailable.length) {
+                                        if (tableAvailable[reservationTableNumber - 1]) {
+                                            System.out.print("Enter the amount of down payment to be paid (minimum 50.000): ");
+                                            int downPaymentAmount = sc.nextInt();
+                                
+                                            if (downPaymentAmount >= 50000) { //  jumlah DP minimal 50.000
+                                                tableAvailable[reservationTableNumber - 1] = false;
+                                                downPayment[reservationTableNumber - 1] = downPaymentAmount;
+                                                System.out.println("Table Reservation " + reservationTableNumber + " Successfull.");
+                                                System.out.println("Amount of down payment paid: " + downPaymentAmount);
                                             } else {
-                                                System.out.println("Meja telah terisi, silahkan memilih meja yang lain");
+                                                System.out.println("The amount of down payment paid is at least 50.000.");
                                             }
                                         } else {
-                                            System.out.println("Nomor meja tidak valid.");
+                                            System.out.println("Table is occupied, please choose another table.");
                                         }
-                                        break;
-                    
-                                    case 3:
-                                        System.out.print("Masukkan nomor meja yang ingin di batalkan: ");
-                                        int nomorMejaHapusReservasi = sc.nextInt();
-                    
-                                        if (nomorMejaHapusReservasi >= 1 && nomorMejaHapusReservasi <= mejaTersedia.length) {
-                                            if (!mejaTersedia[nomorMejaHapusReservasi - 1]) {
-                                                mejaTersedia[nomorMejaHapusReservasi - 1] = true;
-                                                System.out.println("Reservasi meja " + nomorMejaHapusReservasi + " berhasil dihapus.");
-                                            } else {
-                                                System.out.println("Meja belum di reservasi.");
-                                            }
+                                    } else {
+                                        System.out.println("Invalid Table Number.");
+                                    }
+                                    break;
+                                    
+                
+                                case 3:
+                                    System.out.print("Enter the table number you want to cancel: ");
+                                    int deleteReservationTableNumber = sc.nextInt();
+                
+                                    if (deleteReservationTableNumber >= 1 && deleteReservationTableNumber <= tableAvailable.length) {
+                                        if (!tableAvailable[deleteReservationTableNumber - 1]) {
+                                            tableAvailable[deleteReservationTableNumber - 1] = true;
+                                            int cancelDownPayment = downPayment[deleteReservationTableNumber - 1];
+                                            System.out.println("Table reservation " + deleteReservationTableNumber + " successfully cancelled.");
+                                            System.out.println("refundable advance: "+ cancelDownPayment / 2);
                                         } else {
-                                            System.out.println("Nomor meja tidak valid.");
+                                            System.out.println("Table not reserved.");
                                         }
-                                        break;
-                    
-                                    case 0:
-                                        loopReservation = true;
-                                        break;
-                    
-                                    default:
-                                        System.out.println("Pilihan tidak valid. Silakan pilih lagi.");
-                                        break;
+                                    } else {
+                                        System.out.println("Invalid number table.");
+                                    }
+                                    break;
+                
+                                case 0:
+                                    loopReservation = true;
+                                    break;
+                
+                                default:
+                                    System.out.println("Invalid option, please select again.");
+                                    break;
                                 }
                             }
                             break;

@@ -310,7 +310,9 @@ public class beta {
 
                                     case 5:
                                         doShowMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr);
-                                        doDeleteMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr, sc, tempMinusHargaIsBanyakTotalMenuArr, tempMinusMenuArr, tempMinusStockMenuArr, isDeletedMenu);
+                                        doDeleteMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr, sc,
+                                                tempMinusHargaIsBanyakTotalMenuArr, tempMinusMenuArr,
+                                                tempMinusStockMenuArr, isDeletedMenu);
                                         if (isDeletedMenu) {
                                             menuArr = tempMinusMenuArr;
                                             stockMenuArr = tempMinusStockMenuArr;
@@ -483,61 +485,15 @@ public class beta {
 
                                 switch (tableReservation) {
                                     case 1:
-                                        System.out.println("Table List:");
-                                        for (int j = 0; j < tableAvailable.length; j++) {
-                                            String status = tableAvailable[j] ? "Available" : "Not Available";
-                                            System.out.println("Table " + (j + 1) + " : " + status);
-                                        }
+                                       tableList(maxTable, tableAvailable, downPayment, loopReservation);
                                         break;
 
                                     case 2:
-                                        System.out.print("Select the table number you want to serve: ");
-                                        int reservationTableNumber = sc.nextInt();
-
-                                        if (reservationTableNumber >= 1
-                                                && reservationTableNumber <= tableAvailable.length) {
-                                            if (tableAvailable[reservationTableNumber - 1]) {
-                                                System.out.print(
-                                                        "Enter the amount of down payment to be paid (minimum 50.000): ");
-                                                int downPaymentAmount = sc.nextInt();
-
-                                                if (downPaymentAmount >= 50000) { // jumlah DP minimal 50.000
-                                                    tableAvailable[reservationTableNumber - 1] = false;
-                                                    downPayment[reservationTableNumber - 1] = downPaymentAmount;
-                                                    System.out.println("Table Reservation " + reservationTableNumber
-                                                            + " Successfull.");
-                                                    System.out.println(
-                                                            "Amount of down payment paid: " + downPaymentAmount);
-                                                } else {
-                                                    System.out.println(
-                                                            "The amount of down payment paid is at least 50.000.");
-                                                }
-                                            } else {
-                                                System.out.println("Table is occupied, please choose another table.");
-                                            }
-                                        } else {
-                                            System.out.println("Invalid Table Number.");
-                                        }
+                                       reservationTableNumber(maxTable, tableAvailable, downPayment, loopReservation, sc);
                                         break;
 
                                     case 3:
-                                        System.out.print("Enter the table number you want to cancel: ");
-                                        int deleteReservationTableNumber = sc.nextInt();
-
-                                        if (deleteReservationTableNumber >= 1
-                                                && deleteReservationTableNumber <= tableAvailable.length) {
-                                            if (!tableAvailable[deleteReservationTableNumber - 1]) {
-                                                tableAvailable[deleteReservationTableNumber - 1] = true;
-                                                int cancelDownPayment = downPayment[deleteReservationTableNumber - 1];
-                                                System.out.println("Table reservation " + deleteReservationTableNumber
-                                                        + " successfully cancelled.");
-                                                System.out.println("refundable advance: " + cancelDownPayment / 2);
-                                            } else {
-                                                System.out.println("Table not reserved.");
-                                            }
-                                        } else {
-                                            System.out.println("Invalid number table.");
-                                        }
+                                      deleteReservationTableNumber(maxTable, tableAvailable, downPayment, loopReservation, sc);
                                         break;
 
                                     case 0:
@@ -750,7 +706,8 @@ public class beta {
     }
 
     public static void doDeleteMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr,
-            Scanner sc, int[][] tempMinusHargaIsBanyakTotalMenuArr, String[] tempMinusMenuArr, int[] tempMinusStockMenuArr, boolean isDeletedMenu) {
+            Scanner sc, int[][] tempMinusHargaIsBanyakTotalMenuArr, String[] tempMinusMenuArr,
+            int[] tempMinusStockMenuArr, boolean isDeletedMenu) {
         int isDeleteMenu;
 
         System.out.println("Delete Menu");
@@ -760,7 +717,7 @@ public class beta {
 
         System.out.print("Apakah anda yakin [y/n]? ");
         String isYesOrNo = sc.nextLine();
-        
+
         if (isYesOrNo.equalsIgnoreCase("y")) {
             for (int j = 0; j < menuArr.length; j++) {
                 if (j == isDeleteMenu - 1) {
@@ -792,6 +749,68 @@ public class beta {
             }
 
             isDeletedMenu = true;
+        }
+
+    }
+
+    public static void tableList(int maxTable, boolean[] tableAvailable, int[] downPayment, boolean loopReservation) {
+        System.out.println("Table List:");
+        for (int i = 0; i < tableAvailable.length; i++) {
+            String status = tableAvailable[i] ? "Available" : "Not Available";
+            System.out.println("Table " + (i + 1) + " : " + status);
+        }
+
+    }
+
+    public static void reservationTableNumber(int maxTable, boolean[] tableAvailable, int[] downPayment,
+            boolean loopReservation, Scanner sc) {
+        System.out.print("Select the table number you want to serve: ");
+        int reservationTableNumber = sc.nextInt();
+
+        if (reservationTableNumber >= 1
+                && reservationTableNumber <= tableAvailable.length) {
+            if (tableAvailable[reservationTableNumber - 1]) {
+                System.out.print(
+                        "Enter the amount of down payment to be paid (minimum 50.000): ");
+                int downPaymentAmount = sc.nextInt();
+
+                if (downPaymentAmount >= 50000) { // jumlah DP minimal 50.000
+                    tableAvailable[reservationTableNumber - 1] = false;
+                    downPayment[reservationTableNumber - 1] = downPaymentAmount;
+                    System.out.println("Table Reservation " + reservationTableNumber
+                            + " Successfull.");
+                    System.out.println(
+                            "Amount of down payment paid: " + downPaymentAmount);
+                } else {
+                    System.out.println(
+                            "The amount of down payment paid is at least 50.000.");
+                }
+            } else {
+                System.out.println("Table is occupied, please choose another table.");
+            }
+        } else {
+            System.out.println("Invalid Table Number.");
+        }
+    }
+
+    public static void deleteReservationTableNumber(int maxTable, boolean[] tableAvailable, int[] downPayment,
+            boolean loopReservation, Scanner sc) {
+        System.out.print("Enter the table number you want to cancel: ");
+        int deleteReservationTableNumber = sc.nextInt();
+
+        if (deleteReservationTableNumber >= 1
+                && deleteReservationTableNumber <= tableAvailable.length) {
+            if (!tableAvailable[deleteReservationTableNumber - 1]) {
+                tableAvailable[deleteReservationTableNumber - 1] = true;
+                int cancelDownPayment = downPayment[deleteReservationTableNumber - 1];
+                System.out.println("Table reservation " + deleteReservationTableNumber
+                        + " successfully cancelled.");
+                System.out.println("refundable advance: " + cancelDownPayment / 2);
+            } else {
+                System.out.println("Table not reserved.");
+            }
+        } else {
+            System.out.println("Invalid number table.");
         }
 
     }

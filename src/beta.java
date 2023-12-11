@@ -1,4 +1,6 @@
 import java.lang.reflect.Array;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -54,6 +56,13 @@ public class beta {
         String[] tempMinusMenuArr = new String[menuArr.length - 1];
         boolean isDeletedMenu = false;
 
+        // Array laporan penjualan
+        int totalOrders = 0;
+        int[][] salesIdQtyPriceTotalArr = new int[totalOrders + 1][4];
+        String[] salesMenuArr = new String[totalOrders + 1];
+        String[] salesDateReportArr = new String[totalOrders + 1];
+        String[] salesAdminArr = new String[totalOrders + 1];
+
         /*
          * Menu Settings Feature
          */
@@ -96,6 +105,8 @@ public class beta {
                 System.out.print("Password\t: ");
                 password = sc.nextLine();
                 if (password.equals(account[userIndex][1])) { // indeks kolom 1 digunakan hanya untuk mengakses password
+                    // Untuk menjaga keamanan sandi kita memberikan clearScreen
+                    clearScreen();
                     System.out.println("\nLogin Successfully!");
                     isLoggedIn = true;
                 } else {
@@ -123,7 +134,9 @@ public class beta {
                     System.out.println("[5] Sales Report"); // Still Developing
                     System.out.println("[0] Log Out");
                     System.out.print("Select the menu you want: ");
+
                     inputMenu = sc.nextInt();
+                    sc.nextLine();
                     switch (inputMenu) {
                         case 0:
                             isLoggedIn = false;
@@ -133,6 +146,12 @@ public class beta {
                         case 1:
                             // Tampilkan menu
                             doShowMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr);
+
+                            // Reset array
+                            int[][] resetHargaIsBanyakTotalMenuArr = { hargaIsBanyakTotalMenuArr[0],
+                                    { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+                            hargaIsBanyakTotalMenuArr = resetHargaIsBanyakTotalMenuArr;
+                            totalMenuFinal = 0;
 
                             System.out.print("How much menu do you want to order? ");
                             jumlahMenu = sc.nextInt();
@@ -242,10 +261,12 @@ public class beta {
                             System.out.println("\nTotal harga yang harus dibayarkan : " + totalMenuFinal);
                             System.out.print("Masukkan uang anda : ");
                             uangPembeli = sc.nextInt();
+                            sc.nextLine();
 
                             while (uangPembeli < totalMenuFinal) {
                                 System.out.print("\nMaaf uang anda kurang.\nSilahkan memasukkan nominal lain: ");
                                 uangPembeli = sc.nextInt();
+                                sc.nextLine();
 
                             }
 
@@ -254,10 +275,53 @@ public class beta {
                             System.out.println("\n\n-------------------------Struk------------------------");
                             for (int j = 0; j < menuArr.length; j++) {
                                 if (hargaIsBanyakTotalMenuArr[2][j] != 0) {
+
+                                    // Deklarasi Date
+                                    LocalDateTime currentDateTime = LocalDateTime.now();
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                                    String formattedDateTime = currentDateTime.format(formatter);
+                                    // Memasukkan data sale report kedalam array
+                                    String[] tempSalesMenuArr = new String[totalOrders + 1];
+                                    String[] tempSalesDateReportArr = new String[totalOrders + 1];
+                                    String[] tempSalesAdminArr = new String[totalOrders + 1];
+                                    int[][] tempSalesIdQtyPriceTotalArr = new int[totalOrders + 1][4];
+
+                                    for (int k = 0; k < salesMenuArr.length; k++) {
+                                        tempSalesMenuArr[k] = salesMenuArr[k];
+                                        tempSalesDateReportArr[k] = salesDateReportArr[k];
+                                        tempSalesAdminArr[k] = salesAdminArr[k];
+                                        tempSalesIdQtyPriceTotalArr[k][0] = salesIdQtyPriceTotalArr[k][0]; // ID menu
+                                        tempSalesIdQtyPriceTotalArr[k][1] = salesIdQtyPriceTotalArr[k][1]; // jumlah
+                                                                                                           // pesanan
+                                        tempSalesIdQtyPriceTotalArr[k][2] = salesIdQtyPriceTotalArr[k][2]; // Harga
+                                                                                                           // satuan
+                                        tempSalesIdQtyPriceTotalArr[k][3] = salesIdQtyPriceTotalArr[k][3]; // Total
+                                                                                                           // harga
+                                    }
+
+                                    tempSalesMenuArr[tempSalesMenuArr.length - 1] = menuArr[j];
+                                    tempSalesDateReportArr[tempSalesDateReportArr.length - 1] = formattedDateTime;
+                                    tempSalesAdminArr[tempSalesAdminArr.length - 1] = username; // Admin yang melayani
+                                    tempSalesIdQtyPriceTotalArr[totalOrders][0] = totalOrders + 1; // ID menu
+                                    tempSalesIdQtyPriceTotalArr[totalOrders][1] = hargaIsBanyakTotalMenuArr[1][j]; // Jumlah
+                                                                                                                   // pesanan
+                                    tempSalesIdQtyPriceTotalArr[totalOrders][2] = hargaIsBanyakTotalMenuArr[0][j]; // Harga
+                                                                                                                   // satuan
+                                    tempSalesIdQtyPriceTotalArr[totalOrders][3] = hargaIsBanyakTotalMenuArr[2][j]; // Total
+                                                                                                                   // harga
+
+                                    salesMenuArr = tempSalesMenuArr;
+                                    salesDateReportArr = tempSalesDateReportArr;
+                                    salesAdminArr = tempSalesAdminArr;
+                                    salesIdQtyPriceTotalArr = tempSalesIdQtyPriceTotalArr;
+                                    //
+
                                     System.out.printf("%s    \t: %d  x  Rp. %d\t= Rp. %d\n", menuArr[j],
                                             hargaIsBanyakTotalMenuArr[1][j],
                                             hargaIsBanyakTotalMenuArr[0][j],
                                             hargaIsBanyakTotalMenuArr[2][j]);
+
+                                    totalOrders++;
                                 }
                             }
                             System.out.println("------------------------------------------------------");
@@ -265,8 +329,12 @@ public class beta {
                             System.out.println("Cash\t\t:\t\t\t  Rp. " + uangPembeli);
                             System.out.println("Kembalian\t:\t\t\t  Rp. " + uangKembalian);
                             System.out.println("------------------------------------------------------");
-                            System.out.println("  \tTerima Kasih Atas Kunjungan Anda");
+                            System.out.println("  \tTerima Kasih Atas Kunjungan Anda\n");
 
+                            System.out.print("Write anything to continue: ");
+                            sc.nextLine();
+
+                            // Pengurangan stock
                             for (int j = 0; j < stockMenuArr.length; j++) {
                                 stockMenuArr[j] -= hargaIsBanyakTotalMenuArr[1][j];
                             }
@@ -338,6 +406,7 @@ public class beta {
                                 System.out.println("[0] Back to Main Menu");
                                 System.out.print("Select the settings: ");
                                 inputAccount = sc.nextInt();
+                                sc.nextLine();
                                 switch (inputAccount) {
                                     case 0:
                                         loopAccountSettings = true;
@@ -392,6 +461,7 @@ public class beta {
                                         }
                                         System.out.print("Select the account you want to change the username : ");
                                         changeUsername = sc.nextInt();
+                                        sc.nextLine();
                                         System.out.print("Enter a new username : ");
                                         newUsername = sc.next();
                                         if (changeUsername >= 1 && changeUsername <= 5) {
@@ -409,6 +479,7 @@ public class beta {
                                         }
                                         System.out.print("Select the account you want to change the password : ");
                                         changePassword = sc.nextInt();
+                                        sc.nextLine();
                                         System.out.print("Enter a new password : ");
                                         newPassword = sc.next();
                                         if (changePassword >= 1 && changePassword <= 5) {
@@ -431,6 +502,7 @@ public class beta {
                                                 }
                                                 System.out.print("Select account to delete : ");
                                                 inputDeleteAccount = sc.nextInt();
+                                                sc.nextLine();
                                                 if (inputDeleteAccount >= 1 && inputDeleteAccount <= account.length) {
                                                     if (account[inputDeleteAccount][0] != null) {
                                                         if (!account[inputDeleteAccount][0].equals("admin")) {
@@ -482,18 +554,21 @@ public class beta {
                                 System.out.print("Select menu: ");
 
                                 int tableReservation = sc.nextInt();
+                                sc.nextLine();
 
                                 switch (tableReservation) {
                                     case 1:
-                                       tableList(maxTable, tableAvailable, downPayment, loopReservation);
+                                        tableList(maxTable, tableAvailable, downPayment, loopReservation);
                                         break;
 
                                     case 2:
-                                       reservationTableNumber(maxTable, tableAvailable, downPayment, loopReservation, sc);
+                                        reservationTableNumber(maxTable, tableAvailable, downPayment, loopReservation,
+                                                sc);
                                         break;
 
                                     case 3:
-                                      deleteReservationTableNumber(maxTable, tableAvailable, downPayment, loopReservation, sc);
+                                        deleteReservationTableNumber(maxTable, tableAvailable, downPayment,
+                                                loopReservation, sc);
                                         break;
 
                                     case 0:
@@ -506,6 +581,15 @@ public class beta {
                                 }
                             }
                             break;
+
+                        case 5:
+                            doShowSalesReport(totalOrders, salesMenuArr, salesDateReportArr, salesAdminArr,
+                                    salesIdQtyPriceTotalArr);
+                            System.out.print("Write anything to continue: ");
+                            sc.nextLine();
+
+                            break;
+
                         default:
                             System.out.println("\nInvalid input.");
                             break;
@@ -517,6 +601,11 @@ public class beta {
                 }
             }
         }
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     public static void doShowMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr) {
@@ -753,6 +842,27 @@ public class beta {
 
     }
 
+    public static void doShowSalesReport(int totalOrders, String[] salesMenuArr, String[] salesDateReportArr,
+            String[] salesAdminArr, int[][] salesIdQtyPriceTotalArr) {
+        System.out.println("\nLaporan Penjualan:");
+
+        if (totalOrders > 0) {
+            for (int j = 0; j < totalOrders; j++) {
+                System.out.printf("\nOrder #%d:\n", j + 1);
+                System.out.println("Menu: " + salesMenuArr[j]);
+                System.out.println("Tanggal Pemesanan: " + salesDateReportArr[j]);
+                System.out.println("Admin: " + salesAdminArr[j]);
+                System.out.println("ID Menu: " + salesIdQtyPriceTotalArr[j][0]);
+                System.out.println("Jumlah Pesanan: " + salesIdQtyPriceTotalArr[j][1]);
+                System.out.println("Harga Satuan: " + salesIdQtyPriceTotalArr[j][2]);
+                System.out.println("Total Harga: " + salesIdQtyPriceTotalArr[j][3]);
+                System.out.println("-------------------------------------");
+            }
+        } else {
+            System.out.println("Tidak ada laporan penjualan!\n");
+        }
+    }
+
     public static void tableList(int maxTable, boolean[] tableAvailable, int[] downPayment, boolean loopReservation) {
         System.out.println("Table List:");
         for (int i = 0; i < tableAvailable.length; i++) {
@@ -766,6 +876,7 @@ public class beta {
             boolean loopReservation, Scanner sc) {
         System.out.print("Select the table number you want to serve: ");
         int reservationTableNumber = sc.nextInt();
+        sc.nextLine();
 
         if (reservationTableNumber >= 1
                 && reservationTableNumber <= tableAvailable.length) {
@@ -773,6 +884,7 @@ public class beta {
                 System.out.print(
                         "Enter the amount of down payment to be paid (minimum 50.000): ");
                 int downPaymentAmount = sc.nextInt();
+                sc.nextLine();
 
                 if (downPaymentAmount >= 50000) { // jumlah DP minimal 50.000
                     tableAvailable[reservationTableNumber - 1] = false;
@@ -797,6 +909,7 @@ public class beta {
             boolean loopReservation, Scanner sc) {
         System.out.print("Enter the table number you want to cancel: ");
         int deleteReservationTableNumber = sc.nextInt();
+        sc.nextLine();
 
         if (deleteReservationTableNumber >= 1
                 && deleteReservationTableNumber <= tableAvailable.length) {

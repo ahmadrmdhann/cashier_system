@@ -1,7 +1,5 @@
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class beta {
@@ -48,13 +46,8 @@ public class beta {
                 "Susu Soda" };
         int[][] hargaIsBanyakTotalMenuArr = { { 10000, 15000, 8000, 8000, 10000, 5000, 5000, 5000 },
                 { 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0 } };
-        int isDeleteMenu = 0;
         int[] stockMenuArr = { 35, 20, 1, 10, 25, 509, 5320, 20 };
-        int[][] tempMinusHargaIsBanyakTotalMenuArr = new int[hargaIsBanyakTotalMenuArr.length][hargaIsBanyakTotalMenuArr[0].length
-                - 1];
-        int[] tempMinusStockMenuArr = new int[stockMenuArr.length - 1];
-        String[] tempMinusMenuArr = new String[menuArr.length - 1];
-        boolean isDeletedMenu = false;
+        boolean isMenuDeleted;
 
         // Array laporan penjualan
         int totalOrders = 0;
@@ -62,6 +55,7 @@ public class beta {
         String[] salesMenuArr = new String[totalOrders + 1];
         String[] salesDateReportArr = new String[totalOrders + 1];
         String[] salesAdminArr = new String[totalOrders + 1];
+        double totalProfit = 0;
 
         /*
          * Menu Settings Feature
@@ -131,7 +125,7 @@ public class beta {
                     System.out.println("[2] Menu Settings"); // Feature Done
                     System.out.println("[3] Account Settings"); // Feature Done
                     System.out.println("[4] Table Reservation"); // In Progress
-                    System.out.println("[5] Sales Report"); // Still Developing
+                    System.out.println("[5] Sales Report"); // In Progress
                     System.out.println("[0] Log Out");
                     System.out.print("Select the menu you want: ");
 
@@ -159,16 +153,25 @@ public class beta {
                             // Perulangan sesuai input jumlahMenu
                             int i = 1;
                             while (jumlahMenu >= i) {
-                                System.out.printf(
-                                        "\nApa yang ingin anda pesan pada Menu #%d? (Gunakan nomor Pada Menu) ",
-                                        i);
-                                scMenu = sc.nextInt();
+
+                                // Validasi apakah menu yang dipesan memiliki stock 0 atau tidak
+                                while (true) {
+                                    System.out.printf(
+                                            "\nApa yang ingin anda pesan pada Menu #%d? (Gunakan nomor Pada Menu) ",
+                                            i);
+                                    scMenu = sc.nextInt();
+                                    
+                                    if (stockMenuArr[scMenu - 1] < 1) {
+                                        System.out.print("\nMaaf stock sedang kosong!");
+                                        continue;
+                                    } else break;
+                                }
 
                                 while (scMenu > menuArr.length || scMenu < 1
                                         || hargaIsBanyakTotalMenuArr[1][scMenu - 1] != 0) {
                                     // Mengecek kesesuaian input tidak lebih dari menu atau tidak 0
-                                    if (scMenu > menuArr.length || scMenu < 1) {
-                                        System.out.print("Menu tidak ada, silahkan isi kembali: ");
+                                    if (scMenu > menuArr.length || scMenu < 1 || stockMenuArr[scMenu - 1] == 0) {
+                                        System.out.print("Menu tidak tersedia, silahkan isi kembali: ");
                                         scMenu = sc.nextInt();
                                     } else { // Mengecek menu jika sudah pernah ditambahkan
                                         System.out.printf(
@@ -230,9 +233,26 @@ public class beta {
                                             isTruee = false;
                                     }
 
-                                    System.out.printf("Berapa banyak anda ingin memesan %s? ", menuArr[noEditMenu - 1]);
-                                    hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] = sc.nextInt();
-                                    sc.nextLine();
+                                    // Validasi 
+                                    while (true) {
+                                        System.out.printf("Berapa banyak anda ingin memesan %s? ",
+                                                menuArr[noEditMenu - 1]);
+                                        int isValidWithStock = sc.nextInt();
+                                        sc.nextLine();
+
+                                        if (stockMenuArr[noEditMenu - 1] < isValidWithStock) {
+                                            System.out.print(
+                                                    "\nMaaf stock kami belum bisa memenuhi permintaan anda!\n");
+                                            continue;
+                                        } else if (isValidWithStock <= 0) {
+                                            System.out.print(
+                                                    "\nNominal menu tidak bisa kurang dari 1!\n");
+                                            continue;
+                                        } else {
+                                            hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] = isValidWithStock;
+                                            break;
+                                        }
+                                    }
 
                                     // Mengecek kesesuaian banyaknya menu, sehingga tidak 0
                                     while (hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] <= 0) {
@@ -280,7 +300,8 @@ public class beta {
                                     LocalDateTime currentDateTime = LocalDateTime.now();
                                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                                     String formattedDateTime = currentDateTime.format(formatter);
-                                    // Memasukkan data sale report kedalam array
+
+                                    /// Memasukkan data sale report kedalam array
                                     String[] tempSalesMenuArr = new String[totalOrders + 1];
                                     String[] tempSalesDateReportArr = new String[totalOrders + 1];
                                     String[] tempSalesAdminArr = new String[totalOrders + 1];
@@ -314,8 +335,9 @@ public class beta {
                                     salesDateReportArr = tempSalesDateReportArr;
                                     salesAdminArr = tempSalesAdminArr;
                                     salesIdQtyPriceTotalArr = tempSalesIdQtyPriceTotalArr;
-                                    //
+                                    ///
 
+                                    // Menampilkan struk
                                     System.out.printf("%s    \t: %d  x  Rp. %d\t= Rp. %d\n", menuArr[j],
                                             hargaIsBanyakTotalMenuArr[1][j],
                                             hargaIsBanyakTotalMenuArr[0][j],
@@ -333,6 +355,9 @@ public class beta {
 
                             System.out.print("Write anything to continue: ");
                             sc.nextLine();
+
+                            // Menambah totalMenuFinal kedalam variabel total profit
+                            totalProfit += totalMenuFinal;
 
                             // Pengurangan stock
                             for (int j = 0; j < stockMenuArr.length; j++) {
@@ -373,20 +398,43 @@ public class beta {
                                         doChangePrice(menuArr, hargaIsBanyakTotalMenuArr, sc);
                                         break;
                                     case 4:
-                                        doAddMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr, sc);
+                                        // Deklarasi array temporary
+                                        String[] tempMenuArr = new String[menuArr.length + 1]; // +1 kolom
+                                        int[][] tempHargaIsBanyakTotalMenuArr = new int[hargaIsBanyakTotalMenuArr[0].length][tempMenuArr.length]; // +1
+                                                                                                                                                // kolom
+                                                                                                                                                // dari
+                                                                                                                                                // tempMenuArr.length
+                                                                                                                                                // yang
+                                                                                                                                                // telah
+                                                                                                                                                // dideklarasi
+                                                                                                                                                // sebelumnya
+                                        int[] tempStockMenuArr = new int[tempMenuArr.length]; // +1 kolom dari deklarasi
+                                                                                            // tempMenuArr
+
+                                        doAddMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr, sc, tempMenuArr, tempHargaIsBanyakTotalMenuArr, tempStockMenuArr);
+                                        
+                                        menuArr = tempMenuArr;
+                                        hargaIsBanyakTotalMenuArr = tempHargaIsBanyakTotalMenuArr;
+                                        stockMenuArr = tempStockMenuArr;
                                         break;
 
                                     case 5:
+                                        // isMenuDeleted = false;
+                                            String[] tempMinusMenuArr = new String[menuArr.length - 1];
+                                            int[][] tempMinusHargaIsBanyakTotalMenuArr = new int[hargaIsBanyakTotalMenuArr.length][tempMinusMenuArr.length];
+                                            int[] tempMinusStockMenuArr = new int[tempMinusMenuArr.length];
+                                        
                                         doShowMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr);
-                                        doDeleteMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr, sc,
-                                                tempMinusHargaIsBanyakTotalMenuArr, tempMinusMenuArr,
-                                                tempMinusStockMenuArr, isDeletedMenu);
-                                        if (isDeletedMenu) {
+                                        
+                                        isMenuDeleted = doDeleteMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr, sc, tempMinusMenuArr, tempMinusHargaIsBanyakTotalMenuArr, tempMinusStockMenuArr);
+
+                                        if (isMenuDeleted) {
                                             menuArr = tempMinusMenuArr;
                                             stockMenuArr = tempMinusStockMenuArr;
-                                            hargaIsBanyakTotalMenuArr = tempMinusHargaIsBanyakTotalMenuArr;
-                                            isDeletedMenu = false;
+                                            hargaIsBanyakTotalMenuArr = tempMinusHargaIsBanyakTotalMenuArr;                                            
+                                            isMenuDeleted = false;
                                         }
+
                                         break;
 
                                     default:
@@ -584,7 +632,7 @@ public class beta {
 
                         case 5:
                             doShowSalesReport(totalOrders, salesMenuArr, salesDateReportArr, salesAdminArr,
-                                    salesIdQtyPriceTotalArr);
+                                    salesIdQtyPriceTotalArr, totalProfit);
                             System.out.print("Write anything to continue: ");
                             sc.nextLine();
 
@@ -703,21 +751,9 @@ public class beta {
         System.out.println("\nHarga updated.");
     }
 
-    public static void doAddMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr, Scanner sc) {
+    public static boolean doAddMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr, Scanner sc, String[] tempMenuArr, int[][] tempHargaIsBanyakTotalMenuArr, int[] tempStockMenuArr) {
         String newMenuName = "";
         int newMenuPrice, newMenuStock;
-        // Deklarasi array temporary
-        String[] tempMenuArr = new String[menuArr.length + 1]; // +1 kolom
-        int[][] tempHargaIsBanyakTotalMenuArr = new int[hargaIsBanyakTotalMenuArr[0].length][tempMenuArr.length]; // +1
-                                                                                                                  // kolom
-                                                                                                                  // dari
-                                                                                                                  // tempMenuArr.length
-                                                                                                                  // yang
-                                                                                                                  // telah
-                                                                                                                  // dideklarasi
-                                                                                                                  // sebelumnya
-        int[] tempStockMenuArr = new int[tempMenuArr.length]; // +1 kolom dari deklarasi
-                                                              // tempMenuArr
 
         // Mengisi array temporary dengan value array master
         for (int j = 0; j < menuArr.length; j++) {
@@ -777,26 +813,11 @@ public class beta {
         }
 
         tempStockMenuArr[menuArr.length] = newMenuStock;
-
-        menuArr = tempMenuArr;
-        hargaIsBanyakTotalMenuArr = tempHargaIsBanyakTotalMenuArr;
-        stockMenuArr = tempStockMenuArr;
-
-        for (int j = 0; j < tempMenuArr.length; j++) {
-            System.out.println(tempMenuArr[j]);
-        }
-
-        for (int j = 0; j < tempMenuArr.length; j++) {
-            System.out.println(tempHargaIsBanyakTotalMenuArr[0][j]);
-        }
-        for (int j = 0; j < tempMenuArr.length; j++) {
-            System.out.println(tempStockMenuArr[j]);
-        }
+        return true;
     }
 
-    public static void doDeleteMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr,
-            Scanner sc, int[][] tempMinusHargaIsBanyakTotalMenuArr, String[] tempMinusMenuArr,
-            int[] tempMinusStockMenuArr, boolean isDeletedMenu) {
+    public static boolean doDeleteMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr,
+            Scanner sc, String[] tempMinusMenuArr, int[][] tempMinusHargaIsBanyakTotalMenuArr, int[] tempMinusStockMenuArr) {
         int isDeleteMenu;
 
         System.out.println("Delete Menu");
@@ -807,10 +828,12 @@ public class beta {
         System.out.print("Apakah anda yakin [y/n]? ");
         String isYesOrNo = sc.nextLine();
 
+        // Jika user input y maka memasukin proses doDeleteMenu
         if (isYesOrNo.equalsIgnoreCase("y")) {
             for (int j = 0; j < menuArr.length; j++) {
                 if (j == isDeleteMenu - 1) {
                     for (int k = j; k < menuArr.length; k++) {
+                        // Jika sampai akhir indeks akan merubah value menjadi kosong
                         if (k == menuArr.length - 1) {
                             menuArr[k] = null;
                             stockMenuArr[k] = 0;
@@ -818,32 +841,34 @@ public class beta {
                             hargaIsBanyakTotalMenuArr[1][k] = 0;
                             hargaIsBanyakTotalMenuArr[2][k] = 0;
                             break;
+                        } else {
+                            // Replace value terdelete dengan value indeks selanjutnya
+                            menuArr[k] = menuArr[k + 1];
+                            stockMenuArr[k] = stockMenuArr[k + 1];
+                            hargaIsBanyakTotalMenuArr[0][k] = hargaIsBanyakTotalMenuArr[0][k + 1];
+                            hargaIsBanyakTotalMenuArr[1][k] = hargaIsBanyakTotalMenuArr[1][k + 1];
+                            hargaIsBanyakTotalMenuArr[2][k] = hargaIsBanyakTotalMenuArr[2][k + 1];
                         }
 
-                        menuArr[k] = menuArr[k + 1];
-                        stockMenuArr[k] = stockMenuArr[k + 1];
-                        hargaIsBanyakTotalMenuArr[0][k] = hargaIsBanyakTotalMenuArr[0][k + 1];
-                        hargaIsBanyakTotalMenuArr[1][k] = hargaIsBanyakTotalMenuArr[1][k + 1];
-                        hargaIsBanyakTotalMenuArr[2][k] = hargaIsBanyakTotalMenuArr[2][k + 1];
                     }
                 }
             }
 
-            for (int j = 0; j < tempMinusHargaIsBanyakTotalMenuArr[0].length; j++) {
+            for (int j = 0; j < tempMinusMenuArr.length; j++) {
                 tempMinusMenuArr[j] = menuArr[j];
                 tempMinusStockMenuArr[j] = stockMenuArr[j];
                 tempMinusHargaIsBanyakTotalMenuArr[0][j] = hargaIsBanyakTotalMenuArr[0][j];
                 tempMinusHargaIsBanyakTotalMenuArr[1][j] = hargaIsBanyakTotalMenuArr[1][j];
                 tempMinusHargaIsBanyakTotalMenuArr[2][j] = hargaIsBanyakTotalMenuArr[2][j];
             }
-
-            isDeletedMenu = true;
+            return true;
         }
+        return false;
 
     }
 
     public static void doShowSalesReport(int totalOrders, String[] salesMenuArr, String[] salesDateReportArr,
-            String[] salesAdminArr, int[][] salesIdQtyPriceTotalArr) {
+            String[] salesAdminArr, int[][] salesIdQtyPriceTotalArr, double totalProfit) {
         System.out.println("\nLaporan Penjualan:");
 
         if (totalOrders > 0) {
@@ -858,6 +883,9 @@ public class beta {
                 System.out.println("Total Harga: " + salesIdQtyPriceTotalArr[j][3]);
                 System.out.println("-------------------------------------");
             }
+
+            System.out.println("Total pendapatan: " + totalProfit);
+
         } else {
             System.out.println("Tidak ada laporan penjualan!\n");
         }

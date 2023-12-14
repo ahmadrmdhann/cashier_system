@@ -2,7 +2,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class beta {
+public class multibahasa {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -77,6 +77,22 @@ public class beta {
         int[] downPayment = new int[maxTable];
         boolean loopReservation = false;
 
+        /// Bahasa
+        System.out.print("[1] Bahasa\n[2] English\nPilih bahasa: ");
+        String isBahasa = sc.nextLine();
+        switch (isBahasa) {
+            case "2":
+                varBhs.bhs = varBhs.eng;
+                System.out.print("You have selected English. ");
+                break;
+        
+            default:
+                varBhs.eng = varBhs.bhs;
+                System.out.print("Anda telah memilih Bahasa. ");
+                break;
+        }
+        ///
+
         while (!isLoggedIn) {
             // Tempat reset semua variabel yang diperlukan setelah log out
             userIndex = -1;
@@ -119,15 +135,15 @@ public class beta {
                     loopAccountSettings = false;
                     loopReservation = false;
 
-                    System.out.println("\nWelcome to our Restaurant!\n");
+                    System.out.println(varBhs.bhs[1]);
                     System.out.println("-------------------- MAIN MENU --------------------");
-                    System.out.println("[1] Order Here!"); // In Progress
-                    System.out.println("[2] Menu Settings"); // Feature Done
-                    System.out.println("[3] Account Settings"); // Feature Done
-                    System.out.println("[4] Table Reservation"); // In Progress
-                    System.out.println("[5] Sales Report"); // In Progress
-                    System.out.println("[0] Log Out");
-                    System.out.print("Select the menu you want: ");
+                    System.out.println(varBhs.bhs[2]); 
+                    System.out.println(varBhs.bhs[3]); 
+                    System.out.println(varBhs.bhs[4]); 
+                    System.out.println(varBhs.bhs[5]); 
+                    System.out.println(varBhs.bhs[6]); 
+                    System.out.println(varBhs.bhs[7]); 
+                    System.out.print(varBhs.bhs[38]); 
 
                     inputMenu = sc.nextInt();
                     sc.nextLine();
@@ -148,7 +164,7 @@ public class beta {
                             hargaIsBanyakTotalMenuArr = resetHargaIsBanyakTotalMenuArr;
                             totalMenuFinal = 0;
 
-                            System.out.print("How much menu do you want to order? ");
+                            System.out.print(varBhs.bhs[8]);
                             jumlahMenu = sc.nextInt();
 
                             // Perulangan sesuai input jumlahMenu
@@ -158,12 +174,12 @@ public class beta {
                                 // Validasi apakah menu yang dipesan memiliki stock 0 atau tidak
                                 while (true) {
                                     System.out.printf(
-                                            "\nApa yang ingin anda pesan pada Menu #%d? (Gunakan nomor Pada Menu) ",
+                                            varBhs.bhs[9],
                                             i);
                                     scMenu = sc.nextInt();
                                     
                                     if (stockMenuArr[scMenu - 1] < 1) {
-                                        System.out.print("\nMaaf stock sedang kosong!");
+                                        System.out.print(varBhs.bhs[10]);
                                         continue;
                                     } else break;
                                 }
@@ -172,29 +188,26 @@ public class beta {
                                         || hargaIsBanyakTotalMenuArr[1][scMenu - 1] != 0) {
                                     // Mengecek kesesuaian input tidak lebih dari menu atau tidak 0
                                     if (scMenu > menuArr.length || scMenu < 1 || stockMenuArr[scMenu - 1] == 0) {
-                                        System.out.print("Menu tidak tersedia, silahkan isi kembali: ");
+                                        System.out.print(varBhs.bhs[11]);
                                         scMenu = sc.nextInt();
                                     } else { // Mengecek menu jika sudah pernah ditambahkan
-                                        System.out.printf(
-                                                "\nMenu %s sudah ditambahkan\nSilahkan pilih menu yang lain: ",
-                                                menuArr[scMenu - 1]);
+                                        System.out.printf(varBhs.bhs[12], menuArr[scMenu - 1]);
                                         scMenu = sc.nextInt();
                                     }
                                 }
 
                                 // Input elemen array banyak menu tiap menu
-                                System.out.printf("Berapa banyak anda ingin memesan %s? ", menuArr[scMenu - 1]);
+                                System.out.printf(varBhs.bhs[13], menuArr[scMenu - 1]);
 
                                 while (true) { // Validasi input dengan stock yang tersedia
                                     int isValidWithStock = sc.nextInt();
                                     sc.nextLine();
                                     if (stockMenuArr[scMenu - 1] < isValidWithStock) {
-                                        System.out.print(
-                                                "\nMaaf stock kami belum bisa memenuhi permintaan anda!\nBerapa banyak anda ingin memesan? ");
+                                        System.out.print(varBhs.bhs[14]);
                                         continue;
                                     } else if (isValidWithStock <= 0) {
                                         System.out.print(
-                                                "\nNominal menu tidak bisa kurang dari 1!\nBerapa banyak anda ingin memesannya? ");
+                                                varBhs.bhs[15]);
                                         continue;
                                     } else {
                                         hargaIsBanyakTotalMenuArr[1][scMenu - 1] = isValidWithStock;
@@ -212,10 +225,10 @@ public class beta {
                             // Edit menu pilihan user
                             boolean isTrue = true;
                             while (isTrue) {
-                                System.out.print("\nApakah anda ingin mengedit menu? (y/n): ");
+                                System.out.print(varBhs.bhs[16]);
                                 String isEditMenu = sc.nextLine();
                                 if (isEditMenu.equalsIgnoreCase("y")) {
-                                    System.out.print("Menu nomor berapa yang anda ingin edit? ");
+                                    System.out.print(varBhs.bhs[17]);
                                     int noEditMenu = sc.nextInt();
 
                                     // Pengecekan input noEditMenu apabila input tidak sesuai
@@ -223,11 +236,10 @@ public class beta {
                                     while (isTruee) {
                                         if (noEditMenu > hargaIsBanyakTotalMenuArr[1].length || noEditMenu < 1) {
                                             System.out.print(
-                                                    "Menu tersebut bukan menu yang telah anda pilih, masukkan nomor menu yang ingin anda edit: ");
+                                                    varBhs.bhs[18]);
                                             noEditMenu = sc.nextInt();
                                         } else if (hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] == 0) {
-                                            System.out.printf(
-                                                    "Menu #%d %s bukanlah menu yang telah anda pilih, menu nomor berapa yang ingin anda edit? ",
+                                            System.out.printf(varBhs.bhs[19],
                                                     noEditMenu, menuArr[noEditMenu - 1]);
                                             noEditMenu = sc.nextInt();
                                         } else
@@ -236,18 +248,16 @@ public class beta {
 
                                     // Validasi 
                                     while (true) {
-                                        System.out.printf("Berapa banyak anda ingin memesan %s? ",
+                                        System.out.printf(varBhs.bhs[20],
                                                 menuArr[noEditMenu - 1]);
                                         int isValidWithStock = sc.nextInt();
                                         sc.nextLine();
 
                                         if (stockMenuArr[noEditMenu - 1] < isValidWithStock) {
-                                            System.out.print(
-                                                    "\nMaaf stock kami belum bisa memenuhi permintaan anda!\n");
+                                            System.out.print(varBhs.bhs[21]);
                                             continue;
                                         } else if (isValidWithStock <= 0) {
-                                            System.out.print(
-                                                    "\nNominal menu tidak bisa kurang dari 1!\n");
+                                            System.out.print(varBhs.bhs[22]);
                                             continue;
                                         } else {
                                             hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] = isValidWithStock;
@@ -257,8 +267,7 @@ public class beta {
 
                                     // Mengecek kesesuaian banyaknya menu, sehingga tidak 0
                                     while (hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] <= 0) {
-                                        System.out.print(
-                                                "\nNominal menu tidak bisa kurang dari 1!\nBerapa banyak anda ingin memesannya? ");
+                                        System.out.print(varBhs.bhs[15]);
                                         hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] = sc.nextInt();
                                         sc.nextLine();
                                     }
@@ -279,13 +288,13 @@ public class beta {
                                 totalMenuFinal += elemen;
                             }
 
-                            System.out.println("\nTotal harga yang harus dibayarkan : " + totalMenuFinal);
-                            System.out.print("Masukkan uang anda : ");
+                            System.out.println(varBhs.bhs[23] + totalMenuFinal);
+                            System.out.print(varBhs.bhs[24]);
                             uangPembeli = sc.nextInt();
                             sc.nextLine();
 
                             while (uangPembeli < totalMenuFinal) {
-                                System.out.print("\nMaaf uang anda kurang.\nSilahkan memasukkan nominal lain: ");
+                                System.out.print(varBhs.bhs[25]);
                                 uangPembeli = sc.nextInt();
                                 sc.nextLine();
 
@@ -348,13 +357,13 @@ public class beta {
                                 }
                             }
                             System.out.println("------------------------------------------------------");
-                            System.out.println("Total Akhir\t:\t\t\t  Rp. " + totalMenuFinal);
-                            System.out.println("Cash\t\t:\t\t\t  Rp. " + uangPembeli);
-                            System.out.println("Kembalian\t:\t\t\t  Rp. " + uangKembalian);
+                            System.out.println(varBhs.bhs[26] + totalMenuFinal);
+                            System.out.println(varBhs.bhs[27] + uangPembeli);
+                            System.out.println(varBhs.bhs[28] + uangKembalian);
                             System.out.println("------------------------------------------------------");
-                            System.out.println("  \tTerima Kasih Atas Kunjungan Anda\n");
+                            System.out.println(varBhs.bhs[29]);
 
-                            System.out.print("Write anything to continue: ");
+                            System.out.print(varBhs.bhs[30]);
                             sc.nextLine();
 
                             // Menambah totalMenuFinal kedalam variabel total profit
@@ -370,14 +379,14 @@ public class beta {
 
                         case 2:
                             while (!loopMenuSettings) {
-                                System.out.println("\nMenu Settings");
-                                System.out.println("[1] View All Menu");
-                                System.out.println("[2] Update Stock");
-                                System.out.println("[3] Change Price");
-                                System.out.println("[4] Add New Menu");
-                                System.out.println("[5] Delete Menu");
-                                System.out.println("[0] Back to Main Menu");
-                                System.out.print("Select the menu you want : ");
+                                System.out.println(varBhs.bhs[31]);
+                                System.out.println(varBhs.bhs[32]);
+                                System.out.println(varBhs.bhs[33]);
+                                System.out.println(varBhs.bhs[34]);
+                                System.out.println(varBhs.bhs[35]);
+                                System.out.println(varBhs.bhs[36]);
+                                System.out.println(varBhs.bhs[37]);
+                                System.out.print(varBhs.bhs[38]);
                                 inputMenuSettings = sc.nextInt();
                                 sc.nextLine();
                                 switch (inputMenuSettings) {
@@ -387,7 +396,7 @@ public class beta {
 
                                     case 1:
                                         doShowMenu(menuArr, hargaIsBanyakTotalMenuArr, stockMenuArr);
-                                        System.out.print("Write anything to continue: ");
+                                        System.out.print(varBhs.bhs[30]);
                                         sc.nextLine();
                                         break;
 
@@ -446,14 +455,14 @@ public class beta {
 
                         case 3:
                             while (!loopAccountSettings) {
-                                System.out.println("\nAccount Settings :");
-                                System.out.println("[1] View All Account");
-                                System.out.println("[2] Register New Account");
-                                System.out.println("[3] Change Username");
-                                System.out.println("[4] Change Password");
-                                System.out.println("[5] Delete Account");
-                                System.out.println("[0] Back to Main Menu");
-                                System.out.print("Select the settings: ");
+                                System.out.println(varBhs.bhs[39]);
+                                System.out.println(varBhs.bhs[40]);
+                                System.out.println(varBhs.bhs[41]);
+                                System.out.println(varBhs.bhs[42]);
+                                System.out.println(varBhs.bhs[43]);
+                                System.out.println(varBhs.bhs[44]);
+                                System.out.println(varBhs.bhs[37]);
+                                System.out.print(varBhs.bhs[45]);
                                 inputAccount = sc.nextInt();
                                 sc.nextLine();
                                 switch (inputAccount) {
@@ -462,7 +471,7 @@ public class beta {
                                         break;
 
                                     case 1:
-                                        System.out.println("\nView All Account : ");
+                                        System.out.println(varBhs.bhs[40]);
                                         for (int j = 0; j < account.length; j++) {
                                             if (account[j][0] != null) { // Hanya untuk mengecek semua akun yang sudah
                                                                          // ditambahkan
@@ -472,10 +481,10 @@ public class beta {
                                         break;
 
                                     case 2:
-                                        System.out.println("\nRegister New Account ");
-                                        System.out.print("Enter a new username : ");
+                                        System.out.println(varBhs.bhs[46]);
+                                        System.out.print(varBhs.bhs[47]);
                                         newUsername = sc.next();
-                                        System.out.print("Enter a new password : ");
+                                        System.out.print(varBhs.bhs[48]);
                                         newPassword = sc.next();
                                         boolean added = false;
                                         for (int j = 0; j < account.length; j++) {
@@ -487,10 +496,10 @@ public class beta {
                                             }
                                         }
                                         if (added) {
-                                            System.out.println("Account added successfully."); // akan tampil jika
+                                            System.out.println(varBhs.bhs[49]); // akan tampil jika
                                                                                                // sukses membuat akun
                                         } else {
-                                            System.out.println("Account limit reached. Cannot add more accounts."); // akan
+                                            System.out.println(varBhs.bhs[50]); // akan
                                                                                                                     // tampil
                                                                                                                     // jika
                                                                                                                     // akun
@@ -501,17 +510,17 @@ public class beta {
                                         break;
 
                                     case 3:
-                                        System.out.println("\nChange Username Account : ");
+                                        System.out.println(varBhs.bhs[52]);
                                         for (int j = 1; j < account.length; j++) {
                                             if (account[j][0] != null) { // Hanya untuk mengecek semua akun yang sudah
                                                                          // ditambahkan
                                                 System.out.println("[" + j + "] " + account[j][0]);
                                             }
                                         }
-                                        System.out.print("Select the account you want to change the username : ");
+                                        System.out.print(varBhs.bhs[51]);
                                         changeUsername = sc.nextInt();
                                         sc.nextLine();
-                                        System.out.print("Enter a new username : ");
+                                        System.out.print(varBhs.bhs[47]);
                                         newUsername = sc.next();
                                         if (changeUsername >= 1 && changeUsername <= 5) {
                                             account[changeUsername][0] = newUsername;
@@ -519,17 +528,17 @@ public class beta {
                                         break;
 
                                     case 4:
-                                        System.out.println("\nChange Username Account : ");
+                                        System.out.println(varBhs.bhs[53]);
                                         for (int j = 1; j < account.length; j++) {
                                             if (account[j][0] != null) { // Hanya untuk mengecek semua akun yang sudah
                                                                          // ditambahkan
                                                 System.out.println("[" + j + "] " + account[j][0]);
                                             }
                                         }
-                                        System.out.print("Select the account you want to change the password : ");
+                                        System.out.print(varBhs.bhs[54]);
                                         changePassword = sc.nextInt();
                                         sc.nextLine();
-                                        System.out.print("Enter a new password : ");
+                                        System.out.print(varBhs.bhs[48]);
                                         newPassword = sc.next();
                                         if (changePassword >= 1 && changePassword <= 5) {
                                             account[changePassword][1] = newPassword;
@@ -542,14 +551,14 @@ public class beta {
                                             if (account[j][0] != null) { // memeriksa apakah username ada nilai
                                                 hasAccountToDelete = true; // memberikan tanda jika ada username untuk
                                                                            // dihapus
-                                                System.out.println("\nDelete Account ");
-                                                System.out.println("Available Account to Delete:");
+                                                System.out.println(varBhs.bhs[55]);
+                                                System.out.println(varBhs.bhs[56]);
                                                 for (int k = 1; k < account.length; k++) {
                                                     if (account[k][0] != null) {
                                                         System.out.println("[" + k + "] " + account[k][0]);
                                                     }
                                                 }
-                                                System.out.print("Select account to delete : ");
+                                                System.out.print(varBhs.bhs[57]);
                                                 inputDeleteAccount = sc.nextInt();
                                                 sc.nextLine();
                                                 if (inputDeleteAccount >= 1 && inputDeleteAccount <= account.length) {
@@ -559,30 +568,30 @@ public class beta {
                                                                                                    // akun yang diminta
                                                             account[inputDeleteAccount][1] = null; // menghapus password
                                                                                                    // akun yang diminta
-                                                            System.out.println("Delete successfully.");
+                                                            System.out.println(varBhs.bhs[58]);
                                                             break;
                                                         } else {
-                                                            System.out.println("You cannot delete the admin account.");
+                                                            System.out.println(varBhs.bhs[59]);
                                                             break;
                                                         }
                                                     } else {
-                                                        System.out.println("Account doesn't exist!");
+                                                        System.out.println(varBhs.bhs[60]);
                                                         break;
                                                     }
                                                 } else {
                                                     System.out
-                                                            .println("Invalid account. Please enter a valid account.");
+                                                            .println(varBhs.bhs[61]);
                                                     break;
                                                 }
                                             }
                                         }
                                         if (!hasAccountToDelete) { // jika tidak terdapat akun yang akan di hapus
-                                            System.out.println("\nThere are no available account to delete");
+                                            System.out.println(varBhs.bhs[62]);
                                         }
                                         break;
 
                                     default:
-                                        System.out.println("Invalid input.");
+                                        System.out.println(varBhs.bhs[63]);
                                         break;
                                 }
                             }
@@ -595,12 +604,12 @@ public class beta {
                             }
 
                             while (!loopReservation) {
-                                System.out.println("\n===== Table Reservation =====");
-                                System.out.println("[1] Table List");
-                                System.out.println("[2] Reserve Table");
-                                System.out.println("[3] Delete Table Order");
-                                System.out.println("[0] Back to main menu");
-                                System.out.print("Select menu: ");
+                                System.out.println(varBhs.bhs[64]);
+                                System.out.println(varBhs.bhs[65]);
+                                System.out.println(varBhs.bhs[66]);
+                                System.out.println(varBhs.bhs[67]);
+                                System.out.println(varBhs.bhs[37]);
+                                System.out.print(varBhs.bhs[38]);
 
                                 int tableReservation = sc.nextInt();
                                 sc.nextLine();
@@ -625,7 +634,7 @@ public class beta {
                                         break;
 
                                     default:
-                                        System.out.println("Invalid option, please select again.");
+                                        System.out.println(varBhs.bhs[68]);
                                         break;
                                 }
                             }
@@ -634,13 +643,13 @@ public class beta {
                         case 5:
                             doShowSalesReport(totalOrders, salesMenuArr, salesDateReportArr, salesAdminArr,
                                     salesIdQtyPriceTotalArr, totalProfit);
-                            System.out.print("Write anything to continue: ");
+                            System.out.print(varBhs.bhs[30]);
                             sc.nextLine();
 
                             break;
 
                         default:
-                            System.out.println("\nInvalid input.");
+                            System.out.println(varBhs.bhs[69]);
                             break;
                     }
                 } else { // menu yang khusus disiapkan untuk level selain admin
@@ -659,8 +668,8 @@ public class beta {
 
     public static void doShowMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr) {
         System.out.println("\t\t+-------------------------------------------------------+");
-        System.out.println("\t\t|                    MENU                       |       |");
-        System.out.println("\t\t+-Nomor-------------- Makanan --------------------Stock-+");
+        System.out.println("\t\t|                       MENU                    |       |");
+        System.out.println(varBhs.bhs[70]);
 
         for (int j = 0; j < menuArr.length; j++) { // Perulangan Daftar Menu
             System.out.printf("\t\t|  %d\t| %s  \t\tRp. %d\t| %d\t|\n", j + 1, menuArr[j],
@@ -673,27 +682,26 @@ public class beta {
     public static void doUpdateStock(String[] menuArr, int[] stockMenuArr,
             Scanner sc) {
         int inputUpdateStock, inputNewStock;
-        System.out.println("Update Stock: ");
+        System.out.println(varBhs.bhs[71]);
 
         // Menampilkan pilihan menu
         for (int j = 0; j < menuArr.length; j++) {
             System.out.printf("[%d] %s\n", (j + 1), menuArr[j]);
         }
 
-        System.out.print("\nSelect the menu you want to update (use the number) : ");
+        System.out.print(varBhs.bhs[72]);
 
         // Validasi inputUpdateStock tidak boleh lebih dan kurang dari menu yang ada
         while (true) {
             inputUpdateStock = sc.nextInt();
             if (inputUpdateStock > menuArr.length || inputUpdateStock < 1) {
-                System.out.print(
-                        "Input yang anda masukkan salah!\nMasukkan menu yang ingin di update: ");
+                System.out.print(varBhs.bhs[73]);
                 continue;
             } else
                 break;
         }
 
-        System.out.printf("Masukkan perubahan stock dari %s {%d} : ",
+        System.out.printf(varBhs.bhs[74],
                 menuArr[inputUpdateStock - 1], stockMenuArr[inputUpdateStock - 1]);
 
         // Validasi inputNewStock tidak bisa kurang dari 0
@@ -702,37 +710,37 @@ public class beta {
             sc.nextLine();
             if (inputNewStock < 0) {
                 System.out.print(
-                        "Stock tidak bisa kurang dari 0!\nSilahkan masukkan perubahan stock: ");
+                        varBhs.bhs[75]);
             } else
                 break;
         }
 
         // Replace inputNewStock kedalam array stockMenuArr
         stockMenuArr[inputUpdateStock - 1] = inputNewStock;
-        System.out.println("\nStock updated.");
+        System.out.println(varBhs.bhs[76]);
     }
 
     public static void doChangePrice(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr,
             Scanner sc) {
         int inputUpdatePrice, newPrice;
-        System.out.println("\nChange Price");
+        System.out.println(varBhs.bhs[77]);
         for (int j = 0; j < menuArr.length; j++) {
             System.out.printf("[%d] %s\n", (j + 1), menuArr[j]);
         }
-        System.out.print("\nSelect the menu you want to update (use the number) : ");
+        System.out.print(varBhs.bhs[78]);
 
         // Validasi inputUpdatePrice tidak lebih dan kurang dari menu yang ada
         while (true) {
             inputUpdatePrice = sc.nextInt();
             if (inputUpdatePrice > menuArr.length || inputUpdatePrice < 1) {
                 System.out.print(
-                        "Input yang anda masukkan salah!\nMasukkan menu yang ingin di update: ");
+                        varBhs.bhs[73]);
                 continue;
             } else
                 break;
         }
 
-        System.out.printf("Masukkan perubahan harga dari %s {%d} : ",
+        System.out.printf(varBhs.bhs[79],
                 menuArr[inputUpdatePrice - 1],
                 hargaIsBanyakTotalMenuArr[0][inputUpdatePrice - 1]);
 
@@ -742,14 +750,14 @@ public class beta {
             sc.nextLine();
             if (newPrice < 0) {
                 System.out.print(
-                        "Harga tidak bisa kurang dari 0!\nSilahkan masukkan perubahan harga: ");
+                        varBhs.bhs[80]);
             } else
                 break;
         }
 
         // Replace harga menu sebelumnya dengan newPrice
         hargaIsBanyakTotalMenuArr[0][inputUpdatePrice - 1] = newPrice;
-        System.out.println("\nHarga updated.");
+        System.out.println(varBhs.bhs[81]);
     }
 
     public static boolean doAddMenu(String[] menuArr, int[][] hargaIsBanyakTotalMenuArr, int[] stockMenuArr, Scanner sc, String[] tempMenuArr, int[][] tempHargaIsBanyakTotalMenuArr, int[] tempStockMenuArr) {
@@ -763,8 +771,8 @@ public class beta {
             tempStockMenuArr[j] = stockMenuArr[j];
         }
 
-        System.out.println("\nAdd New Menu");
-        System.out.print("Masukkan nama menu baru: ");
+        System.out.println(varBhs.bhs[82]);
+        System.out.print(varBhs.bhs[83]);
 
         boolean menuExists = false;
 
@@ -775,8 +783,7 @@ public class beta {
 
             for (int j = 0; j < tempMenuArr.length; j++) {
                 if (newMenuName.equalsIgnoreCase(tempMenuArr[j])) {
-                    System.out.print(
-                            "Menu sudah ditambahkan! Silahkan masukkan nama menu baru: ");
+                    System.out.print(varBhs.bhs[84]);
                     menuExists = true;
                     break;
                 }
@@ -789,31 +796,32 @@ public class beta {
             }
         }
 
-        System.out.printf("Masukkan harga awal untuk %s: ", newMenuName);
+        System.out.printf(varBhs.bhs[85], newMenuName);
         while (true) {
             newMenuPrice = sc.nextInt();
             if (newMenuPrice <= 0) {
                 System.out.print(
-                        "\nMaaf, harga untuk menu baru tidak bisa kurang dari 1 rupiah\nSilahkan masukkan harga: ");
+                        varBhs.bhs[86]);
                 continue;
             } else
                 break;
         }
         tempHargaIsBanyakTotalMenuArr[0][menuArr.length] = newMenuPrice;
 
-        System.out.printf("Masukkan stock awal untuk %s: ", newMenuName);
+        System.out.printf(varBhs.bhs[87], newMenuName);
         while (true) {
             newMenuStock = sc.nextInt();
             sc.nextLine();
             if (newMenuStock < 0) {
                 System.out.println(
-                        "Maaf, stock untuk menu baru tidak bisa kurang dari 0\nSilahkan masukkan stock awal: ");
+                        varBhs.bhs[88]);
                 continue;
             } else
                 break;
         }
 
         tempStockMenuArr[menuArr.length] = newMenuStock;
+        System.out.println(varBhs.bhs[118]);
         return true;
     }
 
@@ -821,12 +829,12 @@ public class beta {
             Scanner sc, String[] tempMinusMenuArr, int[][] tempMinusHargaIsBanyakTotalMenuArr, int[] tempMinusStockMenuArr) {
         int isDeleteMenu;
 
-        System.out.println("Delete Menu");
-        System.out.print("Masukkan menu nomor berapa yang ingin anda hapus: ");
+        System.out.println(varBhs.bhs[89]);
+        System.out.print(varBhs.bhs[90]);
         isDeleteMenu = sc.nextInt();
         sc.nextLine();
 
-        System.out.print("Apakah anda yakin [y/n]? ");
+        System.out.print(varBhs.bhs[91]);
         String isYesOrNo = sc.nextLine();
 
         // Jika user input y maka memasukin proses doDeleteMenu
@@ -870,40 +878,40 @@ public class beta {
 
     public static void doShowSalesReport(int totalOrders, String[] salesMenuArr, String[] salesDateReportArr,
             String[] salesAdminArr, int[][] salesIdQtyPriceTotalArr, double totalProfit) {
-        System.out.println("\nLaporan Penjualan:");
+        System.out.println(varBhs.bhs[92]);
 
         if (totalOrders > 0) {
             for (int j = 0; j < totalOrders; j++) {
                 System.out.printf("\nOrder #%d:\n", j + 1);
-                System.out.println("Menu: " + salesMenuArr[j]);
-                System.out.println("Tanggal Pemesanan: " + salesDateReportArr[j]);
-                System.out.println("Admin: " + salesAdminArr[j]);
-                System.out.println("ID Menu: " + salesIdQtyPriceTotalArr[j][0]);
-                System.out.println("Jumlah Pesanan: " + salesIdQtyPriceTotalArr[j][1]);
-                System.out.println("Harga Satuan: " + salesIdQtyPriceTotalArr[j][2]);
-                System.out.println("Total Harga: " + salesIdQtyPriceTotalArr[j][3]);
+                System.out.println(varBhs.bhs[93] + salesMenuArr[j]);
+                System.out.println(varBhs.bhs[94] + salesDateReportArr[j]);
+                System.out.println(varBhs.bhs[95] + salesAdminArr[j]);
+                System.out.println(varBhs.bhs[96] + salesIdQtyPriceTotalArr[j][0]);
+                System.out.println(varBhs.bhs[97] + salesIdQtyPriceTotalArr[j][1]);
+                System.out.println(varBhs.bhs[98] + salesIdQtyPriceTotalArr[j][2]);
+                System.out.println(varBhs.bhs[99] + salesIdQtyPriceTotalArr[j][3]);
                 System.out.println("-------------------------------------");
             }
 
-            System.out.println("Total pendapatan: " + totalProfit);
+            System.out.println(varBhs.bhs[100] + totalProfit);
 
         } else {
-            System.out.println("Tidak ada laporan penjualan!\n");
+            System.out.println(varBhs.bhs[101]);
         }
     }
 
     public static void tableList(int maxTable, boolean[] tableAvailable, int[] downPayment, boolean loopReservation) {
-        System.out.println("Table List:");
+        System.out.println(varBhs.bhs[102]);
         for (int i = 0; i < tableAvailable.length; i++) {
-            String status = tableAvailable[i] ? "Available" : "Not Available";
-            System.out.println("Table " + (i + 1) + " : " + status);
+            String status = tableAvailable[i] ? varBhs.bhs[103] : varBhs.bhs[104];
+            System.out.println(varBhs.bhs[105] + (i + 1) + " : " + status);
         }
 
     }
 
     public static void reservationTableNumber(int maxTable, boolean[] tableAvailable, int[] downPayment,
             boolean loopReservation, Scanner sc) {
-        System.out.print("Select the table number you want to serve: ");
+        System.out.print(varBhs.bhs[106]);
         int reservationTableNumber = sc.nextInt();
         sc.nextLine();
 
@@ -911,32 +919,32 @@ public class beta {
                 && reservationTableNumber <= tableAvailable.length) {
             if (tableAvailable[reservationTableNumber - 1]) {
                 System.out.print(
-                        "Enter the amount of down payment to be paid (minimum 50.000): ");
+                        varBhs.bhs[107]);
                 int downPaymentAmount = sc.nextInt();
                 sc.nextLine();
 
                 if (downPaymentAmount >= 50000) { // jumlah DP minimal 50.000
                     tableAvailable[reservationTableNumber - 1] = false;
                     downPayment[reservationTableNumber - 1] = downPaymentAmount;
-                    System.out.println("Table Reservation " + reservationTableNumber
-                            + " Successfull.");
+                    System.out.println(varBhs.bhs[108] + reservationTableNumber
+                            + varBhs.bhs[109]);
                     System.out.println(
-                            "Amount of down payment paid: " + downPaymentAmount);
+                            varBhs.bhs[110] + downPaymentAmount);
                 } else {
                     System.out.println(
-                            "The amount of down payment paid is at least 50.000.");
+                            varBhs.bhs[111]);
                 }
             } else {
-                System.out.println("Table is occupied, please choose another table.");
+                System.out.println(varBhs.bhs[112]);
             }
         } else {
-            System.out.println("Invalid Table Number.");
+            System.out.println(varBhs.bhs[113]);
         }
     }
 
     public static void deleteReservationTableNumber(int maxTable, boolean[] tableAvailable, int[] downPayment,
             boolean loopReservation, Scanner sc) {
-        System.out.print("Enter the table number you want to cancel: ");
+        System.out.print(varBhs.bhs[114]);
         int deleteReservationTableNumber = sc.nextInt();
         sc.nextLine();
 
@@ -945,14 +953,14 @@ public class beta {
             if (!tableAvailable[deleteReservationTableNumber - 1]) {
                 tableAvailable[deleteReservationTableNumber - 1] = true;
                 int cancelDownPayment = downPayment[deleteReservationTableNumber - 1];
-                System.out.println("Table reservation " + deleteReservationTableNumber
-                        + " successfully cancelled.");
-                System.out.println("refundable advance: " + cancelDownPayment / 2);
+                System.out.println(varBhs.bhs[108] + deleteReservationTableNumber
+                        + varBhs.bhs[110]);
+                System.out.println(varBhs.bhs[111] + cancelDownPayment / 2);
             } else {
-                System.out.println("Table not reserved.");
+                System.out.println(varBhs.bhs[112]);
             }
         } else {
-            System.out.println("Invalid number table.");
+            System.out.println(varBhs.bhs[113]);
         }
 
     }

@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-public class Testing {
+public class Testing{
     public static Scanner sc = new Scanner(System.in);
 
     /*
@@ -90,10 +90,29 @@ public class Testing {
                 reservationMenu();
                 break;
             case "3":
-                showSalesReport(totalOrders, salesMenuArr, salesDateReportArr, salesAdminArr,
-                        salesIdQtyPriceTotalArr, totalProfit);
+                boolean loopSalesReport = false;
+                System.out.println("[1] Order Menu\n[2] Reservation Table\n[0] Back to Main Menu");
+                while (!loopSalesReport) {   
+                    System.out.print("Pilih menu yang anda inginkan: ");
+                    String isSalesReport = sc.nextLine();
+                    switch (isSalesReport) {
+                        case "0":
+                            loopSalesReport = true;
+                            break;
+                            case "1":
+                            showSalesReportOrderMenu(totalOrders, salesMenuArr, salesDateReportArr, salesAdminArr, salesIdQtyPriceTotalArr, totalProfit);
+                            loopSalesReport = true;
+                            break;
+                            case "2":
+                            showSalesReportReservation();
+                            loopSalesReport = true;
+                            break;
+                        default:
+                            System.out.println("Input invalid.");
+                    }
+                }
                 break;
-
+                
             case "4":
                 while (!loopMenuSettings) {
                     System.out.println("\nMenu Settings");
@@ -446,7 +465,7 @@ public class Testing {
                 totalOrders++;
             }
         }
-        System.out.println("------------------------------------------------------");
+        System.out.println("--------------------Struk-----------------------------");
         System.out.println("Total Akhir\t:\t\t\t  Rp. " + totalMenuFinal);
         System.out.println("Cash\t\t:\t\t\t  Rp. " + uangPembeli);
         System.out.println("Kembalian\t:\t\t\t  Rp. " + uangKembalian);
@@ -474,7 +493,7 @@ public class Testing {
     public static String[] salesAdminArr = new String[totalOrders + 1];
     public static double totalProfit = 0;
 
-    public static void showSalesReport(int totalOrders, String[] salesMenuArr, String[] salesDateReportArr,
+    public static void showSalesReportOrderMenu(int totalOrders, String[] salesMenuArr, String[] salesDateReportArr,
             String[] salesAdminArr, int[][] salesIdQtyPriceTotalArr, double totalProfit) {
         System.out.println("\nLaporan Penjualan:");
 
@@ -506,6 +525,20 @@ public class Testing {
     public static int[] downPayment = new int[maxTable];
     public static boolean loopReservation = false;
     public static String tableReservation = "";
+
+    public static int totalOrdersReservation = 0;
+    public static String[] salesDateReportReservationArr = new String[totalOrdersReservation + 1]; // tanggal pesan
+    public static String[] arrivalateArr = new String[totalOrdersReservation + 1]; // tanggal kedatangan
+    public static int[] numberTableReservationArr = new int[totalOrdersReservation + 1]; // nomer meja yg di pesan
+    public static String[] salesAdminReservationArr = new String[totalOrdersReservation + 1];// melayani
+    public static boolean isBayarTunai;
+    public static int uangPembeliReservasi;
+    public static int uangPembeliReservasiMeja;
+    public static int uangKembalianReservasi;
+    public static int reservationTableNumber;
+    public static String arrivalAtReservation;
+    public static int[] incomeReservationArr = new int[totalOrdersReservation + 1];
+    public static double totalProfitReservation = 0;
 
     public static void reservationMenu() {
         while (!loopReservation) {
@@ -587,7 +620,7 @@ public class Testing {
         tableAvailable = new boolean[maxTable];
         downPayment = new int[maxTable];
 
-        // Initialize tables
+        // Initialize tables anda make it true
         for (int j = 0; j < maxTable; j++) {
             tableAvailable[j] = true;
             downPayment[j] = 0;
@@ -611,24 +644,178 @@ public class Testing {
     }
 
     public static void reserveTable() {
-        int reservationTableNumber = getUserInputInt("Select the table number you want to serve: ", 1, maxTable);
+        int jamArrival;
+        int tanggalArrival;
+        int bulanArrival;
+        int tahunArrival;
 
-        if (tableAvailable[reservationTableNumber - 1]) {
-            int downPaymentAmount = getUserInputInt("Enter the amount of down payment to be paid (minimum 50,000): ",
-                    50000, Integer.MAX_VALUE);
-
-            if (downPaymentAmount < 50000) {
-                System.out.println("Error: Down payment amount must be at least 50,000. Table reservation failed.");
-                return;
-            }
-
-            tableAvailable[reservationTableNumber - 1] = false;
-            downPayment[reservationTableNumber - 1] = downPaymentAmount;
-            System.out.println("Table Reservation " + reservationTableNumber + " Successful.");
-            System.out.println("Amount of down payment paid: " + downPaymentAmount);
-        } else {
-            System.out.println("Table is occupied, please choose another table.");
+        while (true) {
+            System.out.print("Select the table number you want to serve: ");
+            reservationTableNumber = sc.nextInt();
+            if (reservationTableNumber > tableAvailable.length || reservationTableNumber < 1 || tableAvailable[reservationTableNumber - 1] == false) {
+                System.out.println("Meja tidak valid.\n");
+                continue;
+            } else
+                break;
         }
+        sc.nextLine();
+
+        System.out.println("\nMasukkan tanggal reservasi: ");
+        while (true) {
+            System.out.print("Jam: ");
+            jamArrival = sc.nextInt();
+            if (jamArrival < 1 || jamArrival > 24) {
+                System.out.println("\nJam tidak valid.");
+                continue;
+            } else
+                break;
+        }
+        while (true) {
+            System.out.print("Tanggal: ");
+            tanggalArrival = sc.nextInt();
+            if (tanggalArrival < 1 || tanggalArrival > 32) {
+                System.out.println("\nTanggal tidak valid.");
+                continue;
+            } else
+                break;
+        }
+        while (true) {
+            System.out.print("Bulan: ");
+            bulanArrival = sc.nextInt();
+            if (bulanArrival < 1 || bulanArrival > 12) {
+                System.out.println("\nBulan tidak valid.");
+                continue;
+            } else
+                break;
+        }
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        int tahunSekarang = currentDateTime.getYear();
+
+        while (true) {
+            System.out.print("Tahun: ");
+            tahunArrival = sc.nextInt();
+            sc.nextLine();
+            if (tahunArrival < tahunSekarang) {
+                System.out.println("\nTahun tidak valid.");
+                continue;
+            } else
+                break;
+        }
+
+        if (jamArrival < 10) {
+            arrivalAtReservation = tahunArrival + "-" + bulanArrival + "-" + tanggalArrival + " " + "0" + jamArrival + ":00";
+        } else {
+            arrivalAtReservation = tahunArrival + "-" + bulanArrival + "-" + tanggalArrival + " " + jamArrival + ":00";
+        }
+
+
+        System.out.print("\nAnda memilih bayar:\n[y] Cash 50.000\n[n] DP 25.000\n\nSilahkan memilih (y/n): ");
+        String isDPCash = sc.nextLine();
+        switch (isDPCash) {
+            case "y":
+                isBayarTunai = true;
+                break;
+
+            default:
+                isBayarTunai = false;
+                break;
+        }
+        if (isBayarTunai == true) {
+            System.out.println("\nBayar Cash sejumlah 50.000");
+            while (true) {
+                System.out.print("Masukkan uang anda: ");
+                uangPembeliReservasi = sc.nextInt();
+                sc.nextLine();
+                if (uangPembeliReservasi < 50000) {
+                    System.out.println("\nUang anda kurang");
+                    continue;
+                } else if (uangPembeliReservasi > 50000) {
+                    uangKembalianReservasi = uangPembeliReservasi - 50000;
+                    System.out.println("Kembalian uang anda: " + uangKembalianReservasi);
+                    uangPembeliReservasiMeja = 50000;
+                    totalProfitReservation += uangPembeliReservasiMeja;
+                    break;
+                } else
+                    uangKembalianReservasi = 0;
+                    uangPembeliReservasiMeja = 50000;
+                    totalProfitReservation += uangPembeliReservasiMeja;
+                    break;
+
+            }
+        } else if (isBayarTunai == false) {
+            System.out.println("\nBayar DP sejumlah 25.000");
+            while (true) {
+                System.out.print("Masukkan uang anda: ");
+                uangPembeliReservasi = sc.nextInt();
+                sc.nextLine();
+                if (uangPembeliReservasi < 25000) {
+                    System.out.println("\nUang anda kurang");
+                    continue;
+                } else if (uangPembeliReservasi > 25000) {
+                    uangKembalianReservasi = uangPembeliReservasi - 25000;
+                    System.out.println("Kembalian uang anda: " + uangKembalianReservasi);
+                    uangPembeliReservasiMeja = 25000;
+                    totalProfitReservation += uangPembeliReservasiMeja;
+                    break;
+                } else
+                    uangKembalianReservasi = 0;
+                    uangPembeliReservasiMeja = 25000;
+                    totalProfitReservation += uangPembeliReservasiMeja;
+                    break;
+
+            }
+        }
+
+        tableAvailable[reservationTableNumber - 1] = false;
+        showStrukReservation();
+    }
+
+    public static void showStrukReservation() {
+        // Deklarasi Date
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = currentDateTime.format(formatter);
+
+        String[] tempSalesDateReportReservationArr = new String[totalOrdersReservation + 1];
+        String[] tempArrivalateArr = new String[totalOrdersReservation + 1];
+        int[] tempNumberTableReservationArr = new int[totalOrdersReservation + 1];
+        String[] tempSalesAdminReservationArr = new String[totalOrdersReservation + 1];
+        int[] tempIncomeReservationArr = new int[totalOrdersReservation + 1];
+
+        for (int k = 0; k < incomeReservationArr.length; k++) {
+            tempSalesDateReportReservationArr[k] = salesDateReportReservationArr[k];
+            tempSalesAdminReservationArr[k] = salesAdminReservationArr[k];
+            tempNumberTableReservationArr[k] = numberTableReservationArr[k];
+            tempArrivalateArr[k] = arrivalateArr[k];
+            tempIncomeReservationArr[k] = incomeReservationArr[k];
+
+        }
+
+        tempSalesDateReportReservationArr[tempSalesDateReportReservationArr.length - 1] = formattedDateTime;
+        tempSalesAdminReservationArr[tempSalesAdminReservationArr.length - 1] = username;
+        tempNumberTableReservationArr[tempNumberTableReservationArr.length - 1] = reservationTableNumber;
+        tempArrivalateArr[tempArrivalateArr.length - 1] = arrivalAtReservation;
+        tempIncomeReservationArr[tempIncomeReservationArr.length - 1] = uangPembeliReservasiMeja;
+
+        salesDateReportReservationArr = tempSalesDateReportReservationArr;
+        salesAdminReservationArr = tempSalesAdminReservationArr;
+        numberTableReservationArr = tempNumberTableReservationArr;
+        arrivalateArr = tempArrivalateArr;
+        incomeReservationArr = tempIncomeReservationArr;
+
+        ///
+
+        System.out.println("\n\n-------------------------Struk------------------------");
+        System.out.println("Nomor Meja\t  : \t\t  " + reservationTableNumber);
+        System.out.println("Tanggal Order\t  : \t\t  " + formattedDateTime);
+        System.out.println("Tanggal Reservasi : \t\t  " + arrivalAtReservation);
+        System.out.println("------------------------------------------------------");
+        System.out.println("Cash\t\t:\t\t  Rp. " + uangPembeliReservasi);
+        System.out.println("Kembalian\t:\t\t  Rp. " + uangKembalianReservasi);
+        System.out.println("------------------------------------------------------");
+        System.out.println("  \tTerima Kasih Atas Kunjungan Anda\n");
+
+        totalOrdersReservation++;
     }
 
     public static void deleteReservationTableNumber() {
@@ -641,6 +828,27 @@ public class Testing {
             System.out.println("Refundable advance: " + cancelDownPayment / 2);
         } else {
             System.out.println("Table not reserved.");
+        }
+    }
+    public static void showSalesReportReservation(){
+          System.out.println("\nLaporan Penjualan:");
+
+        if (totalOrdersReservation > 0) {
+            for (int j = 0; j < totalOrdersReservation; j++) {
+                System.out.printf("\nOrder Table #%d:\n", j + 1);
+                System.out.println("Tanggal Pemesanan: " + salesDateReportReservationArr[j]);
+                System.out.println("Tanggal Reservasi: " + arrivalateArr[j]);
+                System.out.println("Nomor Meja: " + numberTableReservationArr[j]);
+                System.out.println("Kasir: " + salesAdminReservationArr[j]);
+                System.out.println("ID Menu: " + numberTableReservationArr[j]);
+                System.out.println("Pemasukan: " + incomeReservationArr[j]);
+                System.out.println("-------------------------------------");
+            }
+
+            System.out.println("Total Pendapatan: " + totalProfitReservation);
+
+        } else {
+            System.out.println("Tidak ada laporan penjualan!\n");
         }
     }
 

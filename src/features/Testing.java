@@ -109,7 +109,7 @@ public class Testing{
     static String[][] orderMenuMessages = {
         { "0",
             "How much menu do you want to order? ", //1 
-            "\nWhat would you like to order from Menu #%d? (Use the number on the menu)", //2
+            "\nWhat would you like to order from Menu #%d? (Use the number on the menu) ", //2
             "Sorry, the stock is currently empty.", // 3
             "The menu is not available, please fill it out again: ", // 4
             "\nMenu %s has been added.\nPlease choose another menu: ", // 5
@@ -131,7 +131,9 @@ public class Testing{
             "Final Total\t:\t\t\t Rp. ", // 21
             "Cash\t\t:\t\t\t  Rp. ", // 22
             "Change \t\t:\t\t\t Rp. ", // 23
-            "  \tThank you for your visit\n" }, // 24
+            "  \tThank you for your visit\n", // 24
+            "The requested number of menu is invalid!\n" //25
+        },
         { "0",
             "Berapa banyak menu yang ingin anda pesan? ",
             "\nApa yang ingin anda pesan pada Menu #%d? (Gunakan nomor Pada Menu) ",
@@ -156,7 +158,8 @@ public class Testing{
             "Total Akhir\t:\t\t\t  Rp. ",
             "Cash\t\t:\t\t\t  Rp. ",
             "Kembalian\t:\t\t\t  Rp. ",
-            "  \tTerima Kasih Atas Kunjungan Anda\n" } };
+            "  \tTerima Kasih Atas Kunjungan Anda\n",
+            "Nomor menu yang diminta tidak valid!\n"}};
     
     static String[][] salesReportMenuMessages = {
         { "0",
@@ -500,11 +503,14 @@ public class Testing{
             { "0", 
                 "Delete Menu", // 1
                 "Enter the number of the menu you want to delete: ", // 2
-                "Are you sure [y/n]? "}, // 3
+                "Are you sure [y/n]? ", // 3
+                "\nInvalid input.\nEnter the number of the menu you want to delete: " //4
+            },
             { "0", 
                 "Hapus Menu", 
                 "Masukkan menu nomor berapa yang ingin anda hapus: ", 
-                "Apakah anda yakin [y/n]? " } };
+                "Apakah anda yakin [y/n]? ",
+                "\nInput tidak valid.\nMasukkan menu nomor berapa yang ingin anda hapus: "}};
     /*
      * Clear Terminal
      */
@@ -767,7 +773,15 @@ public class Testing{
         hargaIsBanyakTotalMenuArr = resetHargaIsBanyakTotalMenuArr;
         totalMenuFinal = 0;
         System.out.print(orderMenuMessages[selectedBahasa][1]);
-        jumlahMenu = sc.nextInt();
+
+        while (true) {
+            jumlahMenu = sc.nextInt();
+            if (jumlahMenu > menuArr.length | jumlahMenu < 1) {
+                System.out.println(orderMenuMessages[selectedBahasa][25]);
+                System.out.print(orderMenuMessages[selectedBahasa][1]);
+                continue;
+            } else break;
+        }
 
         // Perulangan sesuai input jumlahMenu
         int i = 1;
@@ -775,42 +789,45 @@ public class Testing{
 
             // Validasi apakah menu yang dipesan memiliki stock 0 atau tidak
             while (true) {
+                doShowOrderedMenu();
+
                 System.out.printf(orderMenuMessages[selectedBahasa][2], i);
                 scMenu = sc.nextInt();
+
+                while (scMenu > menuArr.length || scMenu < 1
+                        || hargaIsBanyakTotalMenuArr[1][scMenu - 1] != 0) {
+                    // Mengecek kesesuaian input tidak lebih dari menu atau tidak 0
+                    if (scMenu > menuArr.length || scMenu < 1 || stockMenuArr[scMenu - 1] == 0) {
+                        System.out.print(orderMenuMessages[selectedBahasa][4]);
+                        scMenu = sc.nextInt();
+                    } else { // Mengecek menu jika sudah pernah ditambahkan
+                        System.out.printf(
+                                orderMenuMessages[selectedBahasa][4],
+                                menuArr[scMenu - 1]);
+                        scMenu = sc.nextInt();
+                    }
+                }
 
                 if (stockMenuArr[scMenu - 1] < 1) {
                     System.out.print(orderMenuMessages[selectedBahasa][3]);
                     continue;
                 } else
                     break;
-            }
 
-            while (scMenu > menuArr.length || scMenu < 1
-                    || hargaIsBanyakTotalMenuArr[1][scMenu - 1] != 0) {
-                // Mengecek kesesuaian input tidak lebih dari menu atau tidak 0
-                if (scMenu > menuArr.length || scMenu < 1 || stockMenuArr[scMenu - 1] == 0) {
-                    System.out.print(menuMessages[selectedBahasa][4]);
-                    scMenu = sc.nextInt();
-                } else { // Mengecek menu jika sudah pernah ditambahkan
-                    System.out.printf(
-                            menuMessages[selectedBahasa][5],
-                            menuArr[scMenu - 1]);
-                    scMenu = sc.nextInt();
-                }
             }
 
             // Input elemen array banyak menu tiap menu
-            System.out.printf(menuMessages[selectedBahasa][6], menuArr[scMenu - 1]);
+            System.out.printf(orderMenuMessages[selectedBahasa][6], menuArr[scMenu - 1]);
 
             while (true) { // Validasi input dengan stock yang tersedia
                 int isValidWithStock = sc.nextInt();
                 sc.nextLine();
                 if (stockMenuArr[scMenu - 1] < isValidWithStock) {
                     System.out.print(
-                            menuMessages[selectedBahasa][7]);
+                            orderMenuMessages[selectedBahasa][7]);
                     continue;
                 } else if (isValidWithStock <= 0) {
-                    System.out.print(menuMessages[selectedBahasa][8]);
+                    System.out.print(orderMenuMessages[selectedBahasa][8]);
                     continue;
                 } else {
                     hargaIsBanyakTotalMenuArr[1][scMenu - 1] = isValidWithStock;
@@ -827,10 +844,11 @@ public class Testing{
         // Edit menu pilihan user
         boolean isTrue = true;
         while (isTrue) {
-            System.out.print(menuMessages[selectedBahasa][9]);
+            doShowOrderedMenu();
+            System.out.print(orderMenuMessages[selectedBahasa][9]);
             String isEditMenu = sc.nextLine();
             if (isEditMenu.equalsIgnoreCase("y")) {
-                System.out.print(menuMessages[selectedBahasa][10]);
+                System.out.print(orderMenuMessages[selectedBahasa][10]);
                 int noEditMenu = sc.nextInt();
 
                 // Pengecekan input noEditMenu apabila input tidak sesuai
@@ -838,11 +856,11 @@ public class Testing{
                 while (isTruee) {
                     if (noEditMenu > hargaIsBanyakTotalMenuArr[1].length || noEditMenu < 1) {
                         System.out.print(
-                                menuMessages[selectedBahasa][11]);
+                                orderMenuMessages[selectedBahasa][11]);
                         noEditMenu = sc.nextInt();
                     } else if (hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] == 0) {
                         System.out.printf(
-                                menuMessages[selectedBahasa][11],
+                                orderMenuMessages[selectedBahasa][11],
                                 noEditMenu, menuArr[noEditMenu - 1]);
                         noEditMenu = sc.nextInt();
                     } else
@@ -851,18 +869,18 @@ public class Testing{
 
                 // Validasi
                 while (true) {
-                    System.out.printf(menuMessages[selectedBahasa][13],
+                    System.out.printf(orderMenuMessages[selectedBahasa][13],
                             menuArr[noEditMenu - 1]);
                     int isValidWithStock = sc.nextInt();
                     sc.nextLine();
 
                     if (stockMenuArr[noEditMenu - 1] < isValidWithStock) {
                         System.out.print(
-                                menuMessages[selectedBahasa][14]);
+                                orderMenuMessages[selectedBahasa][14]);
                         continue;
                     } else if (isValidWithStock <= 0) {
                         System.out.print(
-                                menuMessages[selectedBahasa][15]);
+                                orderMenuMessages[selectedBahasa][15]);
                         continue;
                     } else {
                         hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] = isValidWithStock;
@@ -873,7 +891,7 @@ public class Testing{
                 // Mengecek kesesuaian banyaknya menu, sehingga tidak 0
                 while (hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] <= 0) {
                     System.out.print(
-                            menuMessages[selectedBahasa][16]);
+                            orderMenuMessages[selectedBahasa][16]);
                     hargaIsBanyakTotalMenuArr[1][noEditMenu - 1] = sc.nextInt();
                     sc.nextLine();
                 }
@@ -894,13 +912,13 @@ public class Testing{
             totalMenuFinal += elemen;
         }
 
-        System.out.println(menuMessages[selectedBahasa][17] + totalMenuFinal);
-        System.out.print(menuMessages[selectedBahasa][18]);
+        System.out.println(orderMenuMessages[selectedBahasa][17] + totalMenuFinal);
+        System.out.print(orderMenuMessages[selectedBahasa][18]);
         uangPembeli = sc.nextInt();
         sc.nextLine();
 
         while (uangPembeli < totalMenuFinal) {
-            System.out.print(menuMessages[selectedBahasa][19]);
+            System.out.print(orderMenuMessages[selectedBahasa][19]);
             uangPembeli = sc.nextInt();
             sc.nextLine();
 
@@ -908,7 +926,7 @@ public class Testing{
 
         uangKembalian = uangPembeli - totalMenuFinal;
 
-        System.out.println(menuMessages[selectedBahasa][20]);
+        System.out.println(orderMenuMessages[selectedBahasa][20]);
         for (int j = 0; j < menuArr.length; j++) {
             if (hargaIsBanyakTotalMenuArr[2][j] != 0) {
 
@@ -963,11 +981,11 @@ public class Testing{
             }
         }
         System.out.println("------------------------------------------------------");
-        System.out.println(menuMessages[selectedBahasa][21] + totalMenuFinal);
-        System.out.println(menuMessages[selectedBahasa][22] + uangPembeli);
-        System.out.println(menuMessages[selectedBahasa][23] + uangKembalian);
+        System.out.println(orderMenuMessages[selectedBahasa][21] + totalMenuFinal);
+        System.out.println(orderMenuMessages[selectedBahasa][22] + uangPembeli);
+        System.out.println(orderMenuMessages[selectedBahasa][23] + uangKembalian);
         System.out.println("------------------------------------------------------");
-        System.out.println(menuMessages[selectedBahasa][24]);
+        System.out.println(orderMenuMessages[selectedBahasa][24]);
 
         // Menambah totalMenuFinal kedalam variabel total profit
         totalProfit += totalMenuFinal;
@@ -1715,8 +1733,14 @@ public class Testing{
 
         System.out.println(doDeleteMessages[selectedBahasa][1]);
         System.out.print(doDeleteMessages[selectedBahasa][2]);
-        isDeleteMenu = sc.nextInt();
-        sc.nextLine();
+        
+        while (true) {
+            isDeleteMenu = sc.nextInt();
+            sc.nextLine();
+            if (isDeleteMenu - 1 > menuArr.length - 1 || isDeleteMenu - 1 < 0) {
+                System.out.print(doDeleteMessages[selectedBahasa][4]);
+            } else break;
+        }
 
         System.out.print(doDeleteMessages[selectedBahasa][3]);
         String isYesOrNo = sc.nextLine();
@@ -1758,6 +1782,15 @@ public class Testing{
         }
         return false;
 
+    }
+
+    public static void doShowOrderedMenu() {
+        for (int j = 0; j < hargaIsBanyakTotalMenuArr[1].length; j++) {
+            if (hargaIsBanyakTotalMenuArr[1][j] != 0) {
+                System.out.println("+---------------------------------------+");
+                System.out.printf("| %s  \tx %d\t= Rp. %d  \t|\n", menuArr[j], hargaIsBanyakTotalMenuArr[1][j], hargaIsBanyakTotalMenuArr[2][j]);
+            }
+        }
     }
 
     public static void displayAccountsList() {

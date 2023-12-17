@@ -127,10 +127,10 @@ public class Testing{
             "\nThe total price to be paid: ", // 17
             "Insert your money: ", // 18
             "\nSorry, your money is insufficient.\nPlease enter a different amount: ", // 19
-            "\n\n-------------------------Receipt------------------------", // 20
-            "Final Total\t:\t\t\t Rp. ", // 21
+            "\n\n-------------------------Receipt----------------------", // 20
+            "Final Total\t:\t\t\t  Rp. ", // 21
             "Cash\t\t:\t\t\t  Rp. ", // 22
-            "Change \t\t:\t\t\t Rp. ", // 23
+            "Change \t\t:\t\t\t  Rp. ", // 23
             "  \tThank you for your visit\n", // 24
             "The requested number of menu is invalid!\n" //25
         },
@@ -304,12 +304,12 @@ public class Testing{
     
     static String[][] showStrukReservationMessages = {
         {"0",
-            "\n\n-------------------------Receipt------------------------", // 1
+            "\n\n-------------------------Receipt----------------------", // 1
             "Table Number\t  : \t\t  ", // 2
             "Order Date\t  : \t\t  ", // 3
-            "Reservation Date : \t\t  ", // 4
-            "Cash\t\t:\t\t  Rp. ", // 5
-            "Change\t:\t\t  Rp. ", // 6
+            "Reservation Date  : \t\t  ", // 4
+            "Cash\t\t  :\t\t  Rp. ", // 5
+            "Change\t\t  :\t\t  Rp. ", // 6
             "  \tThank you for your visit\n" //  7
 
         },
@@ -318,8 +318,8 @@ public class Testing{
             "Nomor Meja\t  : \t\t  ",
             "Tanggal Order\t  : \t\t  ",
             "Tanggal Reservasi : \t\t  ",
-            "Cash\t\t:\t\t  Rp. ",
-            "Kembalian\t:\t\t  Rp. ",
+            "Cash\t\t  :\t\t  Rp. ",
+            "Kembalian\t  :\t\t  Rp. ",
             "  \tTerima Kasih Atas Kunjungan Anda\n"
         }
     };
